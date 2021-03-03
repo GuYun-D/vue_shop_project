@@ -11,13 +11,21 @@
     <!-- 页面主题区域 -->
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside width="200px">
+      <el-aside :width="isColllapse ? '64px' : '200px'">
+        <!-- 侧边栏折叠与展开的按钮 -->
+        <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!-- 侧边栏菜单区域 -->
+        <!-- 
+          collapse: 是否折叠
+          collapse-transition：是否启用动画
+         -->
         <el-menu
           background-color="#333744"
           text-color="#fff"
           active-text-color="#409eff"
           :unique-opened="true"
+          :collapse="isColllapse"
+          :collapse-transition="false"
         >
           <!-- 一级菜单 -->
           <!-- 
@@ -63,7 +71,10 @@ export default {
         '101': 'iconfont icon-shangpin',
         '102': 'iconfont icon-danju',
         '145': 'iconfont icon-baobiao'
-      }
+      },
+
+      // 菜单是否折叠
+      isColllapse: false
     }
   },
   // 使用生命周期函数
@@ -88,6 +99,11 @@ export default {
       }
       this.menulist = res.data
     },
+
+    // 使用elementui参数
+    toggleCollapse(){
+      this.isColllapse = !this.isColllapse
+    }
   },
 }
 </script>
@@ -134,5 +150,15 @@ export default {
 
 .iconfont{
   margin-right: 10px;
+}
+
+.toggle-button{
+  color: #fff;
+  font-size: 10px;
+  line-height: 24px;
+  text-align: center;
+  background-color: #4a5064;
+  letter-spacing: 0.2em;
+  cursor: pointer;
 }
 </style>
