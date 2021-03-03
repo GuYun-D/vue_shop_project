@@ -19,21 +19,24 @@
           active-text-color="#ffd04b"
         >
           <!-- 一级菜单 -->
-          <el-submenu index="1">
+          <!-- 
+            动态绑定index，不然点击第一个剩下的都跟着动，index接受字符串的值
+           -->
+          <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
             <!-- 一级菜单的模板区域 -->
             <template slot="title">
               <!-- 图标 -->
               <i class="el-icon-location"></i>
-              <span>导航一</span>
+              <span>{{item.authName}}</span>
             </template>
 
             <!-- 二级菜单 -->
-            <el-menu-item index="1-4-1">
+            <el-menu-item index="1-4-1" :key="subItem.id" v-for="subItem in item.children">
               <!-- 复制一级菜单的模板区域 -->
               <template slot="title">
                 <!-- 图标 -->
                 <i class="el-icon-location"></i>
-                <span>导航一</span>
+                <span>{{subItem.authName}}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -47,14 +50,14 @@
 
 <script>
 export default {
-  data(){
+  data() {
     return {
       // 左侧菜单数据
-      menulist: []
+      menulist: [],
     }
   },
   // 使用生命周期函数
-  created(){
+  created() {
     this.getMenuList()
   },
   methods: {
@@ -64,17 +67,17 @@ export default {
     },
 
     // 获取所有菜单数据
-    async getMenuList(){
+    async getMenuList() {
       // $http.get?
-      const {data : res} = await this.$http.get('menus')
-      console.log(res);
+      const { data: res } = await this.$http.get('menus')
+      console.log(res)
 
       // 返回数据res中meta中有
-      if(res.meta.status !== 200){
-        return this.$message.error(res.meta.msg);
+      if (res.meta.status !== 200) {
+        return this.$message.error(res.meta.msg)
       }
       this.menulist = res.data
-    }
+    },
   },
 }
 </script>
