@@ -20,6 +20,7 @@
           collapse-transition：是否启用动画
           router: 为导航开启路由模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转
                   并将index的值修改为path路径,手动添加/,二级菜单
+          default-active: 当前激活菜单的 index,使之高亮
          -->
         <el-menu
           background-color="#333744"
@@ -29,26 +30,36 @@
           :collapse="isColllapse"
           :collapse-transition="false"
           :router="true"
+          :default-active="activePath"
         >
           <!-- 一级菜单 -->
           <!-- 
             动态绑定index，不然点击第一个剩下的都跟着动，index接受字符串的值
            -->
-          <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
+          <el-submenu
+            :index="item.id + ''"
+            v-for="item in menulist"
+            :key="item.id"
+          >
             <!-- 一级菜单的模板区域 -->
             <template slot="title">
               <!-- 图标 -->
               <i :class="iconObj[item.id]"></i>
-              <span>{{item.authName}}</span>
+              <span>{{ item.authName }}</span>
             </template>
 
             <!-- 二级菜单 -->
-            <el-menu-item :index="'/' + subItem.path" :key="subItem.id" v-for="subItem in item.children">
+            <el-menu-item
+              :index="'/' + subItem.path"
+              :key="subItem.id"
+              v-for="subItem in item.children"
+              @click="saveNavStatus('/' + subItem.path)"
+            >
               <!-- 复制一级菜单的模板区域 -->
               <template slot="title">
                 <!-- 图标 -->
                 <i class="el-icon-menu"></i>
-                <span>{{subItem.authName}}</span>
+                <span>{{ subItem.authName }}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -72,20 +83,24 @@ export default {
 
       // 一级菜单图标,使用id绑定的方式
       iconObj: {
-        '125': 'iconfont icon-user',
-        '103': 'iconfont icon-tijikongjian',
-        '101': 'iconfont icon-shangpin',
-        '102': 'iconfont icon-danju',
-        '145': 'iconfont icon-baobiao'
+        125: 'iconfont icon-user',
+        103: 'iconfont icon-tijikongjian',
+        101: 'iconfont icon-shangpin',
+        102: 'iconfont icon-danju',
+        145: 'iconfont icon-baobiao',
       },
 
       // 菜单是否折叠
-      isColllapse: false
+      isColllapse: false,
+
+      // 被激活的链接地址
+      activePath: '',
     }
   },
   // 使用生命周期函数
   created() {
     this.getMenuList()
+    this.activePath = window.sessionStorage.getItem('activePatn')
   },
   methods: {
     logout() {
@@ -107,9 +122,20 @@ export default {
     },
 
     // 使用elementui参数
-    toggleCollapse(){
+    toggleCollapse() {
       this.isColllapse = !this.isColllapse
-    }
+    },
+
+    // 保存连接的激活状态
+    /**
+     * 原理：在点击哪个二级菜单时，就将该二级菜单的id保存到sessionStorage
+     *      利用生命周期函数执行this.activePath = window.sessionStorage.getItem('activePatn')
+     *       再将值赋给default-active
+     */
+    saveNavStatus(activePath) {
+      window.sessionStorage.setItem('activePatn', activePath)
+      this.activePath = activePath
+    },
   },
 }
 </script>
@@ -146,7 +172,7 @@ export default {
   background-color: #333744;
 }
 
-.el-aside .el-menu{
+.el-aside .el-menu {
   border-right: none;
 }
 
@@ -154,11 +180,11 @@ export default {
   background-color: #eaedf1;
 }
 
-.iconfont{
+.iconfont {
   margin-right: 10px;
 }
 
-.toggle-button{
+.toggle-button {
   color: #fff;
   font-size: 10px;
   line-height: 24px;
