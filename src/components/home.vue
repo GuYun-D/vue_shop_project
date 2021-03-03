@@ -18,6 +18,8 @@
         <!-- 
           collapse: 是否折叠
           collapse-transition：是否启用动画
+          router: 为导航开启路由模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转
+                  并将index的值修改为path路径,手动添加/,二级菜单
          -->
         <el-menu
           background-color="#333744"
@@ -26,6 +28,7 @@
           :unique-opened="true"
           :collapse="isColllapse"
           :collapse-transition="false"
+          :router="true"
         >
           <!-- 一级菜单 -->
           <!-- 
@@ -40,7 +43,7 @@
             </template>
 
             <!-- 二级菜单 -->
-            <el-menu-item :index="subItem.id + ''" :key="subItem.id" v-for="subItem in item.children">
+            <el-menu-item :index="'/' + subItem.path" :key="subItem.id" v-for="subItem in item.children">
               <!-- 复制一级菜单的模板区域 -->
               <template slot="title">
                 <!-- 图标 -->
