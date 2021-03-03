@@ -35,9 +35,9 @@
         <el-table-column label="邮箱" prop="email"> </el-table-column>
         <el-table-column label="电话" prop="mobile"> </el-table-column>
         <el-table-column label="角色" prop="role_name"> </el-table-column>
-        <el-table-column label="状态" prop="mg_status">
+        <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.mg_status"> </el-switch>
+            <el-switch v-model="scope.row.mg_state"> </el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作"> </el-table-column>
@@ -81,7 +81,7 @@ export default {
 
       this.userlist = res.data.users
       this.total = res.data.total
-      //   console.log(res)
+      console.log(res)
     },
   },
 }
