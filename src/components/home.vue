@@ -16,7 +16,7 @@
         <el-menu
           background-color="#333744"
           text-color="#fff"
-          active-text-color="#ffd04b"
+          active-text-color="#409eff"
         >
           <!-- 一级菜单 -->
           <!-- 
@@ -26,16 +26,16 @@
             <!-- 一级菜单的模板区域 -->
             <template slot="title">
               <!-- 图标 -->
-              <i class="el-icon-location"></i>
+              <i :class="iconObj[item.id]"></i>
               <span>{{item.authName}}</span>
             </template>
 
             <!-- 二级菜单 -->
-            <el-menu-item index="1-4-1" :key="subItem.id" v-for="subItem in item.children">
+            <el-menu-item :index="subItem.id + ''" :key="subItem.id" v-for="subItem in item.children">
               <!-- 复制一级菜单的模板区域 -->
               <template slot="title">
                 <!-- 图标 -->
-                <i class="el-icon-location"></i>
+                <i class="el-icon-menu"></i>
                 <span>{{subItem.authName}}</span>
               </template>
             </el-menu-item>
@@ -54,6 +54,15 @@ export default {
     return {
       // 左侧菜单数据
       menulist: [],
+
+      // 一级菜单图标,使用id绑定的方式
+      iconObj: {
+        '125': 'iconfont icon-user',
+        '103': 'iconfont icon-tijikongjian',
+        '101': 'iconfont icon-shangpin',
+        '102': 'iconfont icon-danju',
+        '145': 'iconfont icon-baobiao'
+      }
     }
   },
   // 使用生命周期函数
@@ -116,5 +125,9 @@ export default {
 
 .el-main {
   background-color: #eaedf1;
+}
+
+.iconfont{
+  margin-right: 10px;
 }
 </style>
