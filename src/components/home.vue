@@ -47,11 +47,34 @@
 
 <script>
 export default {
+  data(){
+    return {
+      // 左侧菜单数据
+      menulist: []
+    }
+  },
+  // 使用生命周期函数
+  created(){
+    this.getMenuList()
+  },
   methods: {
     logout() {
       window.sessionStorage.clear()
       this.$router.push('/login')
     },
+
+    // 获取所有菜单数据
+    async getMenuList(){
+      // $http.get?
+      const {data : res} = await this.$http.get('menus')
+      console.log(res);
+
+      // 返回数据res中meta中有
+      if(res.meta.status !== 200){
+        return this.$message.error(res.meta.msg);
+      }
+      this.menulist = res.data
+    }
   },
 }
 </script>
