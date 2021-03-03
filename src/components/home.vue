@@ -124,6 +124,10 @@ export default {
   background-color: #333744;
 }
 
+.el-aside .el-menu{
+  border-right: none;
+}
+
 .el-main {
   background-color: #eaedf1;
 }
