@@ -12,3 +12,8 @@ body,
     margin-bottom: 15px;
     font-size: 12px;
 }
+
+.el-table{
+    top: 15px;
+    font-size: 12px;
+}
