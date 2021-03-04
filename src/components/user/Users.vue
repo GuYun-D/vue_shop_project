@@ -36,7 +36,9 @@
           </div>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisable = true">添加用户</el-button>
+          <el-button type="primary" @click="addDialogVisable = true"
+            >添加用户</el-button
+          >
         </el-col>
       </el-row>
 
@@ -114,9 +116,28 @@
         visible.sync：控制对话框的显示与隐藏，绑定布尔值
         before-close：对话框关闭之前触发
        -->
-      <el-dialog title="提示" :visible.sync="addDialogVisable" width="50%">
+      <el-dialog title="添加用户" :visible.sync="addDialogVisable" width="50%">
         <!-- 内容主题区域 -->
-        <span>这是一段信息</span>
+        <!-- 对话框主体区域 -->
+        <el-form
+          :model="addForm"
+          :rules="addFormRules"
+          ref="addFormRef"
+          label-width="70px"
+        >
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="addForm.username"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="addForm.password"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="addForm.email"></el-input>
+          </el-form-item>
+          <el-form-item label="手机" prop="moblie">
+            <el-input v-model="addForm.moblie"></el-input>
+          </el-form-item>
+        </el-form>
         <!-- 底部区域 -->
         <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisable = false">取 消</el-button>
@@ -149,6 +170,41 @@ export default {
 
       // 用于控制添加用户对话框的显示与隐藏
       addDialogVisable: false,
+
+      // 添加用户的表单数据
+      addForm: {
+        username: '',
+        password: '',
+        emali: '',
+        moblie: '',
+      },
+
+      // 添加表单的验证规则对象
+      addFormRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          {
+            min: 3,
+            max: 10,
+            message: '用户名长度应在3~10个字符之间',
+            trigger: 'blur',
+          },
+        ],
+
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          {
+            min: 6,
+            max: 15,
+            message: '用户名长度应在6~15个字符之间',
+            trigger: 'blur',
+          },
+        ],
+
+        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+
+        moblie: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+      },
     }
   },
 
