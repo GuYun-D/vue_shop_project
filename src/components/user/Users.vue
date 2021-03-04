@@ -21,13 +21,22 @@
             <!-- 
               elementui提供clear事件，当点击clearable之后触发
              -->
-            <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList">
-              <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
+            <el-input
+              placeholder="请输入内容"
+              v-model="queryInfo.query"
+              clearable
+              @clear="getUserList"
+            >
+              <el-button
+                slot="append"
+                icon="el-icon-search"
+                @click="getUserList"
+              ></el-button>
             </el-input>
           </div>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">添加用户</el-button>
+          <el-button type="primary" @click="addDialogVisable = true">添加用户</el-button>
         </el-col>
       </el-row>
 
@@ -99,6 +108,23 @@
         :total="total"
       >
       </el-pagination>
+
+      <!-- 添加用户 -->
+      <!-- 
+        visible.sync：控制对话框的显示与隐藏，绑定布尔值
+        before-close：对话框关闭之前触发
+       -->
+      <el-dialog title="提示" :visible.sync="addDialogVisable" width="50%">
+        <!-- 内容主题区域 -->
+        <span>这是一段信息</span>
+        <!-- 底部区域 -->
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="addDialogVisable = false">取 消</el-button>
+          <el-button type="primary" @click="addDialogVisable = false"
+            >确 定</el-button
+          >
+        </span>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -120,6 +146,9 @@ export default {
 
       //   总
       total: 0,
+
+      // 用于控制添加用户对话框的显示与隐藏
+      addDialogVisable: false,
     }
   },
 
