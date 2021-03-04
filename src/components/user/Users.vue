@@ -18,8 +18,11 @@
         <el-col :span="8">
           <!-- 搜索与添加区域 -->
           <div>
-            <el-input placeholder="请输入内容">
-              <el-button slot="append" icon="el-icon-search"></el-button>
+            <!-- 
+              elementui提供clear事件，当点击clearable之后触发
+             -->
+            <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList">
+              <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
             </el-input>
           </div>
         </el-col>
@@ -106,6 +109,7 @@ export default {
     return {
       // 获取用户列表的参数对象
       queryInfo: {
+        // 搜索关键字query
         query: '',
         pagenum: 1,
         pagesize: 2,
