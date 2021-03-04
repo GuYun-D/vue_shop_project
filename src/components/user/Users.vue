@@ -37,7 +37,12 @@
         <el-table-column label="角色" prop="role_name"> </el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.mg_state"> </el-switch>
+            <!-- 为开关添加改变事件 -->
+            <el-switch
+              v-model="scope.row.mg_state"
+              @change="usersStateChanged(scope.row)"
+            >
+            </el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="180px">
@@ -147,13 +152,28 @@ export default {
       this.queryInfo.pagenum = newPage
       this.getUserList()
     },
+
+    // 监听switch开关状态的变化
+    async usersStateChanged(userInfo) {
+      // console.log(userInfo);
+      const { data: res } = await this.$http.put(
+        `users/${userInfo.id}/state/${userInfo.mg_state}`
+      )
+      // console.log("在这呢");
+      // console.log(res);
+      if (res.meta.status !== 200) {
+        userInfo.mg_state = !userInfo.mg_state
+        return this.$message.erroe('更新用户失败')
+      }
+
+      this.$message.success('用户修改成功')
+    },
   },
 }
 </script>
 
 <style scoped>
-  .el-pagination{
-    margin-top: 25px;
-    
-  }
+.el-pagination {
+  margin-top: 25px;
+}
 </style>
