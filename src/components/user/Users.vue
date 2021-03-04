@@ -62,11 +62,35 @@
               placement="top-start"
               :enterable="false"
             >
-              <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+              <el-button
+                type="warning"
+                icon="el-icon-setting"
+                size="mini"
+              ></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
+
+      <!--
+        分页区域
+        size-change：页码大小变动时触发
+        current-change：当前页发生变动时触发
+        current-page：当前显示的是第几页的数据
+        page-sizes: 每页显示几条数据
+        page-size：当前每页显式几条数据
+        layout: 表示要展示哪些控件，如total就是显式总共有几页，删除之后页面相应区域也会消失
+      -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[1, 2, 3, 4]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -108,9 +132,28 @@ export default {
       this.total = res.data.total
       console.log(res)
     },
+
+    // 监听pagesize改变的事件
+    handleSizeChange(newSize) {
+      // 最新的页码值
+      // console.log(newSize)
+      // 将新的页码重新赋值，并重新查询
+      this.queryInfo.pagesize = newSize
+      this.getUserList()
+    },
+
+    handleCurrentChange(newPage) {
+      console.log(newPage)
+      this.queryInfo.pagenum = newPage
+      this.getUserList()
+    },
   },
 }
 </script>
 
 <style scoped>
+  .el-pagination{
+    margin-top: 25px;
+    
+  }
 </style>
