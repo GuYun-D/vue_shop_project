@@ -66,6 +66,7 @@
               type="primary"
               icon="el-icon-edit"
               size="mini"
+              @click="showEditDialog"
             ></el-button>
             <!-- 删除按钮 -->
             <el-button
@@ -111,7 +112,7 @@
       >
       </el-pagination>
 
-      <!-- 添加用户 -->
+      <!-- 添加用户对话框 -->
       <!-- 
         visible.sync：控制对话框的显示与隐藏，绑定布尔值
         before-close：对话框关闭之前触发
@@ -150,6 +151,21 @@
         </span>
       </el-dialog>
     </el-card>
+
+    <!-- 修改用户的对话框 -->
+    <el-dialog
+      title="修改用户信息"
+      :visible.sync="editDialogVisible"
+      width="50%"
+    >
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editDialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -205,6 +221,9 @@ export default {
 
       // 用于控制添加用户对话框的显示与隐藏
       addDialogVisable: false,
+
+      // 用于显式与隐藏修改对话框
+      editDialogVisible: false,
 
       // 添加用户的表单数据
       addForm: {
@@ -328,6 +347,11 @@ export default {
         // 新增用户之后，刷新用户列表
         this.getUserList()
       })
+    },
+
+    // 展示编辑用户的对话框
+    showEditDialog() {
+      this.editDialogVisible = true
     },
   },
 }
