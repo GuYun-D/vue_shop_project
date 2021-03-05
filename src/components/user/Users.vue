@@ -153,6 +153,38 @@
 <script>
 export default {
   data() {
+    // 自定义校验规则
+    /**
+      rule：校验规则
+      value：要检验的值
+      callback：回调函数
+     */
+    // 邮箱
+    var checkEmail = (rule, value, callback) => {
+      // 校验邮箱正则
+      const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
+      // 校验
+      if (regEmail.test(value)) {
+        // 合法邮箱
+        return callback()
+      }
+
+      callback(new Error('请输入合法邮箱'))
+    }
+
+    // 手机号
+    var checkMoblie = (rule, value, callback) => {
+      // 校验邮箱正则
+      const regMoblie = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+      // 校验
+      if (regMoblie.test(value)) {
+        // 合法邮箱
+        return callback()
+      }
+
+      callback(new Error('请输入合法手机号'))
+    }
+
     return {
       // 获取用户列表的参数对象
       queryInfo: {
@@ -201,9 +233,15 @@ export default {
           },
         ],
 
-        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur' },
+        ],
 
-        moblie: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        moblie: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { validator: checkMoblie, trigger: 'blur' },
+        ],
       },
     }
   },
