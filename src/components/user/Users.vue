@@ -60,7 +60,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="180px">
-          <template>
+          <template slot-scope="scope">
             <!-- 修改按钮 -->
             <el-button
               type="primary"
@@ -265,6 +265,9 @@ export default {
           { validator: checkMoblie, trigger: 'blur' },
         ],
       },
+
+      // 点击修改，查询到的用户信息
+      editForm: {},
     }
   },
 
@@ -350,9 +353,17 @@ export default {
     },
 
     // 展示编辑用户的对话框
-    showEditDialog(id) {
+    async showEditDialog(id) {
+      const { data: res } = await this.$http.get('users/' + id)
+      if (res.meta.status !== 200) {
+        return this.$message.error('用户数据查询失败')
+      }
+
+      // 将获取到的用户信息赋值给editForm
+      this.editForm = res.data
+
       this.editDialogVisible = true
-      console.log(id)
+      // console.log(id)
     },
   },
 }
