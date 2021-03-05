@@ -141,7 +141,7 @@
         <!-- 底部区域 -->
         <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisable = false">取 消</el-button>
-          <el-button type="primary" @click="addDialogVisable = false"
+          <el-button type="primary" @click="addUser"
             >确 定</el-button
           >
         </span>
@@ -300,6 +300,18 @@ export default {
     addDialogClose(){
       this.$refs.addFormRef.resetFields()
       console.log(this.$refs);
+    },
+
+    // 添加用户前的预校验
+    addUser(){
+      this.$refs.addFormRef.validate(valid => {
+        // console.log(valid);
+        if(!valid){
+          return false
+        }
+
+        // 验证通过，发起请求
+      })
     }
   },
 }
