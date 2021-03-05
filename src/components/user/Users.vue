@@ -66,7 +66,7 @@
               type="primary"
               icon="el-icon-edit"
               size="mini"
-              @click="showEditDialog"
+              @click="showEditDialog(scope.row.id)"
             ></el-button>
             <!-- 删除按钮 -->
             <el-button
@@ -150,22 +150,22 @@
           <el-button type="primary" @click="addUser">确 定</el-button>
         </span>
       </el-dialog>
-    </el-card>
 
-    <!-- 修改用户的对话框 -->
-    <el-dialog
-      title="修改用户信息"
-      :visible.sync="editDialogVisible"
-      width="50%"
-    >
-      <span>这是一段信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editDialogVisible = false"
-          >确 定</el-button
-        >
-      </span>
-    </el-dialog>
+      <!-- 修改用户的对话框 -->
+      <el-dialog
+        title="修改用户信息"
+        :visible.sync="editDialogVisible"
+        width="50%"
+      >
+        <span>这是一段信息</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="editDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="editDialogVisible = false"
+            >确 定</el-button
+          >
+        </span>
+      </el-dialog>
+    </el-card>
   </div>
 </template>
 
@@ -350,8 +350,9 @@ export default {
     },
 
     // 展示编辑用户的对话框
-    showEditDialog() {
+    showEditDialog(id) {
       this.editDialogVisible = true
+      console.log(id)
     },
   },
 }
