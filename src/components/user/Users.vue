@@ -116,7 +116,12 @@
         visible.sync：控制对话框的显示与隐藏，绑定布尔值
         before-close：对话框关闭之前触发
        -->
-      <el-dialog title="添加用户" :visible.sync="addDialogVisable" width="50%" @close="addDialogClose">
+      <el-dialog
+        title="添加用户"
+        :visible.sync="addDialogVisable"
+        width="50%"
+        @close="addDialogClose"
+      >
         <!-- 内容主题区域 -->
         <!-- 对话框主体区域 -->
         <el-form
@@ -141,9 +146,7 @@
         <!-- 底部区域 -->
         <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisable = false">取 消</el-button>
-          <el-button type="primary" @click="addUser"
-            >确 定</el-button
-          >
+          <el-button type="primary" @click="addUser">确 定</el-button>
         </span>
       </el-dialog>
     </el-card>
@@ -297,22 +300,35 @@ export default {
     },
 
     // 监听添加用户对话框的关闭事件
-    addDialogClose(){
+    addDialogClose() {
       this.$refs.addFormRef.resetFields()
-      console.log(this.$refs);
+      console.log(this.$refs)
     },
 
     // 添加用户前的预校验
-    addUser(){
-      this.$refs.addFormRef.validate(valid => {
+    addUser() {
+      this.$refs.addFormRef.validate(async (valid) => {
         // console.log(valid);
-        if(!valid){
+        if (!valid) {
           return false
         }
 
         // 验证通过，发起请求
+        const { data: res } = await this.$http.post('users', this.addForm)
+
+        if (res.meta.status !== 200) {
+          this.$message.error('添加用户失败')
+        }
+
+        this.$message.success('添加用户成功')
+
+        // 添加后关闭对话框
+        this.addDialogVisable = false
+
+        // 新增用户之后，刷新用户列表
+        this.getUserList()
       })
-    }
+    },
   },
 }
 </script>
