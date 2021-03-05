@@ -170,15 +170,13 @@
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="editForm.email"></el-input>
           </el-form-item>
-          <el-form-item label="电话" prop="moblie">
-            <el-input v-model="editForm.moblie"></el-input>
+          <el-form-item label="电话" prop="mobile">
+            <el-input v-model="editForm.mobile"></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="editDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="editDialogVisible = false"
-            >确 定</el-button
-          >
+          <el-button type="primary" @click="editUserInfo">确 定</el-button>
         </span>
       </el-dialog>
     </el-card>
@@ -286,13 +284,13 @@ export default {
       editForm: {},
 
       // 修改表单的验证规则
-       editFormRules: {
+      editFormRules: {
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
           { validator: checkEmail, trigger: 'blur' },
         ],
 
-        moblie: [
+        mobile: [
           { required: true, message: '请输入正确手机号', trigger: 'blur' },
           { validator: checkMoblie, trigger: 'blur' },
         ],
@@ -396,9 +394,20 @@ export default {
     },
 
     // 监听修改用户对话框的关闭事件，并重置表单
-    editDialogClose(){
+    editDialogClose() {
       this.$refs.editFormRef.resetFields()
-    }
+    },
+
+    // 提交用户修改信息预验证
+    editUserInfo() {
+      this.$refs.editFormRef.validate( valid => {
+        // console.log(valid);
+        if(!valid){
+          return 
+        }
+        // 发起请求
+      })
+    },
   },
 }
 </script>
