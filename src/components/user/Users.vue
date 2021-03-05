@@ -156,6 +156,7 @@
         title="修改用户信息"
         :visible.sync="editDialogVisible"
         width="50%"
+        @close="editDialogClose"
       >
         <el-form
           :model="editForm"
@@ -170,7 +171,7 @@
             <el-input v-model="editForm.email"></el-input>
           </el-form-item>
           <el-form-item label="电话" prop="moblie">
-            <el-input v-model="editForm.mobile"></el-input>
+            <el-input v-model="editForm.moblie"></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -285,7 +286,7 @@ export default {
       editForm: {},
 
       // 修改表单的验证规则
-      editFormRules: {
+       editFormRules: {
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
           { validator: checkEmail, trigger: 'blur' },
@@ -393,6 +394,11 @@ export default {
       this.editDialogVisible = true
       // console.log(id)
     },
+
+    // 监听修改用户对话框的关闭事件，并重置表单
+    editDialogClose(){
+      this.$refs.editFormRef.resetFields()
+    }
   },
 }
 </script>
