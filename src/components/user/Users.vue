@@ -116,7 +116,7 @@
         visible.sync：控制对话框的显示与隐藏，绑定布尔值
         before-close：对话框关闭之前触发
        -->
-      <el-dialog title="添加用户" :visible.sync="addDialogVisable" width="50%">
+      <el-dialog title="添加用户" :visible.sync="addDialogVisable" width="50%" @close="addDialogClose">
         <!-- 内容主题区域 -->
         <!-- 对话框主体区域 -->
         <el-form
@@ -295,6 +295,12 @@ export default {
 
       this.$message.success('用户修改成功')
     },
+
+    // 监听添加用户对话框的关闭事件
+    addDialogClose(){
+      this.$refs.addFormRef.resetFields()
+      console.log(this.$refs);
+    }
   },
 }
 </script>
