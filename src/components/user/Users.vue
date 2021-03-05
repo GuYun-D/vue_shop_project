@@ -157,7 +157,22 @@
         :visible.sync="editDialogVisible"
         width="50%"
       >
-        <span>这是一段信息</span>
+        <el-form
+          :model="editForm"
+          :rules="editFormRules"
+          ref="editFormRef"
+          label-width="70px"
+        >
+          <el-form-item label="用户名">
+            <el-input v-model="editForm.username" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="editForm.email"></el-input>
+          </el-form-item>
+          <el-form-item label="电话" prop="moblie">
+            <el-input v-model="editForm.mobile"></el-input>
+          </el-form-item>
+        </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="editDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="editDialogVisible = false"
@@ -268,6 +283,19 @@ export default {
 
       // 点击修改，查询到的用户信息
       editForm: {},
+
+      // 修改表单的验证规则
+      editFormRules: {
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur' },
+        ],
+
+        moblie: [
+          { required: true, message: '请输入正确手机号', trigger: 'blur' },
+          { validator: checkMoblie, trigger: 'blur' },
+        ],
+      },
     }
   },
 
