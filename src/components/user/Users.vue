@@ -400,12 +400,27 @@ export default {
 
     // 提交用户修改信息预验证
     editUserInfo() {
-      this.$refs.editFormRef.validate( valid => {
+      this.$refs.editFormRef.validate(async valid => {
         // console.log(valid);
-        if(!valid){
-          return 
+        if (!valid) {
+          return
         }
         // 发起请求
+        const {data: res} = await this.$http.put('users/' + this.editForm.id, {
+          email: this.editForm.email,
+          moblie: this.editForm.moblie,
+        })
+
+        if(res.meta.status !== 200){
+          return this.$message.error('用户更新失败')
+        }
+
+        // 修改成功，关闭对话框，刷新数据列表
+        this.editDialogVisible = false
+        this.getUserList()
+        this.$message.success("修改用户信息成功")
+        console.log(this.editForm);
+        
       })
     },
   },
