@@ -140,8 +140,8 @@
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="addForm.email"></el-input>
           </el-form-item>
-          <el-form-item label="手机" prop="moblie">
-            <el-input v-model="addForm.moblie"></el-input>
+          <el-form-item label="手机" prop="mobile">
+            <el-input v-model="addForm.mobile"></el-input>
           </el-form-item>
         </el-form>
         <!-- 底部区域 -->
@@ -206,11 +206,11 @@ export default {
     }
 
     // 手机号
-    var checkMoblie = (rule, value, callback) => {
+    var checkmobile = (rule, value, callback) => {
       // 校验邮箱正则
-      const regMoblie = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+      const regmobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
       // 校验
-      if (regMoblie.test(value)) {
+      if (regmobile.test(value)) {
         // 合法邮箱
         return callback()
       }
@@ -244,7 +244,7 @@ export default {
         username: '',
         password: '',
         emali: '',
-        moblie: '',
+        mobile: '',
       },
 
       // 添加表单的验证规则对象
@@ -274,9 +274,9 @@ export default {
           { validator: checkEmail, trigger: 'blur' },
         ],
 
-        moblie: [
+        mobile: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { validator: checkMoblie, trigger: 'blur' },
+          { validator: checkmobile, trigger: 'blur' },
         ],
       },
 
@@ -292,7 +292,7 @@ export default {
 
         mobile: [
           { required: true, message: '请输入正确手机号', trigger: 'blur' },
-          { validator: checkMoblie, trigger: 'blur' },
+          { validator: checkmobile, trigger: 'blur' },
         ],
       },
     }
@@ -408,7 +408,7 @@ export default {
         // 发起请求
         const {data: res} = await this.$http.put('users/' + this.editForm.id, {
           email: this.editForm.email,
-          moblie: this.editForm.moblie,
+          mobile: this.editForm.mobile,
         })
 
         if(res.meta.status !== 200){
