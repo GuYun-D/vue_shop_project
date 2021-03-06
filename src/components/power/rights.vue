@@ -1,15 +1,22 @@
 <template>
-    <div>
-        <h1>权限列表组件</h1>
-    </div>
+  <div>
+    <!-- 面包屑导航区域 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>权限管理</el-breadcrumb-item>
+      <el-breadcrumb-item>权限列表</el-breadcrumb-item>
+    </el-breadcrumb>
+
+    <!-- 视图区域 -->
+    <el-card>
+        
+    </el-card>
+  </div>
 </template>
 
 <script>
-export default {
-    
-}
+export default {}
 </script>
 
 <style scoped>
-
 </style>
