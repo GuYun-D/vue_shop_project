@@ -8,14 +8,41 @@
     </el-breadcrumb>
 
     <!-- 视图区域 -->
-    <el-card>
-        
-    </el-card>
+    <el-card> </el-card>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      // 权限列表
+      rightsList: [],
+    }
+  },
+
+  // 生命周期函数
+  created() {
+    // 获取所有权限列表
+    this.getRightsList()
+  },
+
+  methods: {
+    async getRightsList() {
+      const { data: res } = await this.$http.get('rights/list')
+      // console.log(res);
+      if (res.meta.status !== 200) {
+        return this.$message.error('权限列表获取失败')
+      }
+
+      this.$message.success("权限数据列表获取成功")
+
+      this.rightsList = res.data
+
+      console.log(this.rightsList);
+    },
+  },
+}
 </script>
 
 <style scoped>
