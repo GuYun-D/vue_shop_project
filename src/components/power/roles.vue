@@ -101,7 +101,14 @@
       :visible.sync="setRightDialogVisibe"
       width="50%"
     >
-      <span></span>
+      <!-- 树形控件 -->
+      <!-- 
+          data: 绑定数据源
+          props：树形控件绑定的值
+          show-checkbox：展示复选框
+          default-expand-all：默认展开
+       -->
+      <el-tree :data="rightsList" :props="treeProps" show-checkbox node-key="id" default-expand-all></el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialogVisibe = false">取 消</el-button>
         <el-button type="primary" @click="setRightDialogVisibe = false"
@@ -124,6 +131,12 @@ export default {
 
       //   权限列表
       rightsList: [],
+
+      // 树形控件的绑定对象
+      treeProps: {
+          label: 'authName',
+          children: 'children'
+      },
     }
   },
 
@@ -189,7 +202,7 @@ export default {
       }
 
       this.rightsList = res.data
-      console.log(this.rightsList);
+      console.log(this.rightsList)
 
       this.setRightDialogVisibe = true
     },
