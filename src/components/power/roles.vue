@@ -76,7 +76,7 @@
         <el-table-column label="角色名称" prop="roleName"></el-table-column>
         <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
         <el-table-column label="操作">
-          <template slot-scope="">
+          <template slot-scope="scope">
             <el-button size="mini" type="primary" icon="el-icon-edit"
               >编辑</el-button
             >
@@ -87,7 +87,7 @@
               size="mini"
               type="warning"
               icon="el-icon-setting"
-              @click="showSetRightDialog"
+              @click="showSetRightDialog(scope.row)"
               >分配权限</el-button
             >
           </template>
@@ -107,8 +107,17 @@
           props：树形控件绑定的值
           show-checkbox：展示复选框
           default-expand-all：默认展开
+          default-checkbox-keys： 默认选中的节点。id值
        -->
-      <el-tree :data="rightsList" :props="treeProps" show-checkbox node-key="id" default-expand-all></el-tree>
+      <el-tree
+        :data="rightsList"
+        :props="treeProps"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :default-checked-keys="defkeys"
+        ref="treeRef"
+      ></el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialogVisibe = false">取 消</el-button>
         <el-button type="primary" @click="setRightDialogVisibe = false"
@@ -134,9 +143,12 @@ export default {
 
       // 树形控件的绑定对象
       treeProps: {
-          label: 'authName',
-          children: 'children'
+        label: 'authName',
+        children: 'children',
       },
+
+      // 默认选中的权限
+      defkeys: [],
     }
   },
 
@@ -157,7 +169,7 @@ export default {
 
       console.log(res.data)
 
-      this.$message.success('角色数据获取成功')
+      // this.$message.success('角色数据获取成功')
     },
 
     // 根据id，删除对应权限
@@ -194,7 +206,7 @@ export default {
     },
 
     // 展示分配权限的对话框
-    async showSetRightDialog() {
+    async showSetRightDialog(role) {
       // 获取所有权限数据列表
       const { data: res } = await this.$http.get('rights/tree')
       if (res.meta.status !== 200) {
@@ -202,9 +214,27 @@ export default {
       }
 
       this.rightsList = res.data
-      console.log(this.rightsList)
+      // console.log(this.rightsList)
+
+      // 递归获取三级节点
+      this.getLeafKeys(role, this.defkeys)
+
+      // console.log("默认选中的三级权限有" + this.defkeys);
 
       this.setRightDialogVisibe = true
+    },
+
+    // 通过递归的形式，获取角色下所有三级权限的id， 并保存到defkeys中
+    getLeafKeys(node, arr) {
+      if (!node.children) {
+        // 若果当前节点不包含children属性，说明是三级权限
+        return arr.push(node.id)
+      }
+
+      // 不是第三级权限，继续循环
+      node.children.forEach((items) => {
+        this.getLeafKeys(items, arr)
+      })
     },
   },
 }
