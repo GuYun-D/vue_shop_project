@@ -17,42 +17,61 @@
       </el-row>
 
       <!-- 角色列表 -->
+      <el-table :data="roleList">
+        <!-- 展开列 -->
+        <el-table-column type="expand"></el-table-column>
 
+        <!-- 索引列 -->
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="角色名称" prop="roleName"></el-table-column>
+        <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" type="primary" icon="el-icon-edit"
+              >编辑</el-button
+            >
+            <el-button size="mini" type="danger" icon="el-icon-delete"
+              >删除</el-button
+            >
+            <el-button size="mini" type="warning" icon="el-icon-setting"
+              >分配权限</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
     </el-card>
   </div>
 </template>
 
 <script>
 export default {
-    data(){
-        return {
-            // 所有角色列表数据
-            roleList: []
-        }
-    },
-
-    created(){
-        // 获取角色列表数据
-        this.getRoleList()
-    },
-
-    methods: {
-        async getRoleList(){
-            const {data: res} = await this.$http.get('roles')
-            // 判断
-            if(res.meta.status !== 200){
-                return this.$message.erroe('角色列表数据获取失败')
-            }
-
-            this.roleList = res.data
-
-            console.log(res.data);
-
-            this.$message.success("角色数据获取成功")
-
-
-        }
+  data() {
+    return {
+      // 所有角色列表数据
+      roleList: [],
     }
+  },
+
+  created() {
+    // 获取角色列表数据
+    this.getRoleList()
+  },
+
+  methods: {
+    async getRoleList() {
+      const { data: res } = await this.$http.get('roles')
+      // 判断
+      if (res.meta.status !== 200) {
+        return this.$message.erroe('角色列表数据获取失败')
+      }
+
+      this.roleList = res.data
+
+      console.log(res.data)
+
+      this.$message.success('角色数据获取成功')
+    },
+  },
 }
 </script>
 
