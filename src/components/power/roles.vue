@@ -43,7 +43,7 @@
                     <i class="el-icon-caret-right"></i>
                   </el-col>
                   <el-col span="18">
-                      <el-tag type="warning" :key="item3.id" v-for="(item3, i3) in item2.children">{{item3.authName}}</el-tag>
+                      <el-tag type="warning" :key="item3.id" v-for="(item3) in item2.children">{{item3.authName}}</el-tag>
                   </el-col>
                 </el-row>
               </el-col>
@@ -56,7 +56,7 @@
         <el-table-column label="角色名称" prop="roleName"></el-table-column>
         <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
         <el-table-column label="操作">
-          <template slot-scope="scope">
+          <template slot-scope="">
             <el-button size="mini" type="primary" icon="el-icon-edit"
               >编辑</el-button
             >
