@@ -28,22 +28,42 @@
             >
               <!-- 渲染一级权限 -->
               <el-col :span="5">
-                <el-tag>{{ item1.authName }}</el-tag>
+                <el-tag
+                  closable
+                  @close="removeRightById(scope.row, item1.id)"
+                  >{{ item1.authName }}</el-tag
+                >
                 <i class="el-icon-caret-right"></i>
               </el-col>
 
               <!-- 渲染二级和三级权限 -->
               <el-col :span="19">
-                <el-row :key="item2.id" v-for="(item2, i2) in item1.children" :class="[i2 === 0 ? '' : 'bdtop']">
+                <el-row
+                  :key="item2.id"
+                  v-for="(item2, i2) in item1.children"
+                  :class="[i2 === 0 ? '' : 'bdtop']"
+                >
                   <!-- 二级权限 -->
                   <el-col :span="6">
-                    <el-tag type="success">
+                    <el-tag
+                      type="success"
+                      closable
+                      @close="removeRightById(scope.row, item2.id)"
+                    >
                       {{ item2.authName }}
                     </el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
+                  <!-- 三级权限 -->
                   <el-col span="18">
-                      <el-tag type="warning" :key="item3.id" v-for="(item3) in item2.children">{{item3.authName}}</el-tag>
+                    <el-tag
+                      type="warning"
+                      :key="item3.id"
+                      v-for="item3 in item2.children"
+                      closable
+                      @close="removeRightById(scope.row, item3.id)"
+                      >{{ item3.authName }}</el-tag
+                    >
                   </el-col>
                 </el-row>
               </el-col>
@@ -100,6 +120,39 @@ export default {
       console.log(res.data)
 
       this.$message.success('角色数据获取成功')
+    },
+
+    // 根据id，删除对应权限
+    async removeRightById(role, rightId) {
+      // 弹框提示用户是否删除
+      const confirmResult = await this.$confirm(
+        '此操作将永久删除该权限, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).catch((err) => err)
+
+      if (confirmResult !== 'confirm') {
+        return this.$message.info('已取消删除操作')
+      }
+
+      //   console.log('确认删除')
+      const { data: res } = await this.$http.delete(
+        `roles/${role.id}/rights/${rightId}`
+      )
+
+      if (res.meta.status !== 200) {
+        return this.$message.error('权限删除失败')
+      }
+
+      // 重新获取列表数据会发生页面的刷新
+      //   this.getRoleList()
+      role.children = res.data
+
+      this.$message.success('权限删除成功')
     },
   },
 }
