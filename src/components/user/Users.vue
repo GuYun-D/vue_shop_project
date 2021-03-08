@@ -192,6 +192,18 @@
       <div>
         <p>当前用户： {{ userInfo.username }}</p>
         <p>当前角色： {{ userInfo.role_name }}</p>
+        <p>
+          分配新角色
+          <el-select v-model="selectedRoleId" placeholder="请选择">
+            <el-option
+              v-for="item in rolesList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRoleDialogVisable = false">取 消</el-button>
@@ -324,6 +336,9 @@ export default {
 
       // 所有角色列表
       rolesList: [],
+
+      // 已选中的角色值
+      selectedRoleId: ''
     }
   },
 
