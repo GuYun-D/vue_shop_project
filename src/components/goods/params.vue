@@ -34,6 +34,16 @@
           ></el-cascader>
         </el-col>
       </el-row>
+
+      <!-- tabs标签页 -->
+      <!-- 
+          v-model：将当前激活的tab标签页名称绑定到数据中
+          tab-click：tabs切换时触发
+       -->
+      <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
+        <el-tab-pane label="动态参数" name="first">动态参数</el-tab-pane>
+        <el-tab-pane label="静态属性" name="second">静态属性</el-tab-pane>
+      </el-tabs>
     </el-card>
   </div>
 </template>
@@ -57,6 +67,9 @@ export default {
 
       // 级联选择框双向绑定到的数据
       selectedOption: [],
+
+      // 默认显示第一个
+      activeName: 'first',
     }
   },
 
@@ -77,17 +90,22 @@ export default {
 
     // 級聯選擇框選中項變化，會觸發此函數
     handleChange() {
-        // console.log(this.selectedOption);
-        // 限制用户只能选择三级分类，利用selectedOption，三级数组长度为3，二级数组长度为2
-        // 选择不是三级分类
-        if(this.selectedOption.length !== 3){
-            this.selectedOption = []
-            return this.$message.error("请选择三级分类")
-        }
+      // console.log(this.selectedOption);
+      // 限制用户只能选择三级分类，利用selectedOption，三级数组长度为3，二级数组长度为2
+      // 选择不是三级分类
+      if (this.selectedOption.length !== 3) {
+        this.selectedOption = []
+        return this.$message.error('请选择三级分类')
+      }
 
-        // 选中三级分类
-        console.log(this.selectedOption);
+      // 选中三级分类
+      console.log(this.selectedOption)
     },
+
+    // tab页签点击事件处理函数
+    handleTabClick(){
+        console.log(this.activeName);
+    }
   },
 }
 </script>
