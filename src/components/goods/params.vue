@@ -41,8 +41,12 @@
           tab-click：tabs切换时触发
        -->
       <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
-        <el-tab-pane label="动态参数" name="first">动态参数</el-tab-pane>
-        <el-tab-pane label="静态属性" name="second">静态属性</el-tab-pane>
+        <el-tab-pane label="动态参数" name="first">
+          <el-button type="primary" size="mini" :disabled="isDisabled">添加参数</el-button>
+        </el-tab-pane>
+        <el-tab-pane label="静态属性" name="second">
+          <el-button type="primary" size="mini" :disabled="isDisabled">添加属性</el-button>
+        </el-tab-pane>
       </el-tabs>
     </el-card>
   </div>
@@ -103,9 +107,22 @@ export default {
     },
 
     // tab页签点击事件处理函数
-    handleTabClick(){
-        console.log(this.activeName);
-    }
+    handleTabClick() {
+      console.log(this.activeName)
+    },
+  },
+
+  // 计算属性
+  computed: {
+    // 如果按钮需要被禁用返回true，反之false
+    isDisabled() {
+        // 关联selectedOption，监听用户是否选中三级分类
+        if(this.selectedOption.length !== 3){
+            return true
+        }
+
+        return false
+    },
   },
 }
 </script>
