@@ -97,7 +97,11 @@ export default {
     },
 
     // 級聯選擇框選中項變化，會觸發此函數
-    async handleChange() {
+    handleChange() {
+      this.getParamsData()
+    },
+
+    async getParamsData() {
       // console.log(this.selectedOption);
       // 限制用户只能选择三级分类，利用selectedOption，三级数组长度为3，二级数组长度为2
       // 选择不是三级分类
@@ -110,18 +114,24 @@ export default {
       console.log(this.selectedOption)
 
       // 根据所选的id，当前所处的面板进行发送请求
-      const {data: res} = await this.$http.get(`categories/${this.cateId}/attributes`, { params: {sel: this.activeName} })
+      const { data: res } = await this.$http.get(
+        `categories/${this.cateId}/attributes`,
+        {
+          params: { sel: this.activeName },
+        }
+      )
 
-      if(res.meta.status !== 200){
-          return this.$message.error("参数列表获取失败")
+      if (res.meta.status !== 200) {
+        return this.$message.error('参数列表获取失败')
       }
 
-      console.log(res.data);
+      console.log(res.data)
     },
 
     // tab页签点击事件处理函数
     handleTabClick() {
-      console.log(this.activeName)
+      //   console.log(this.activeName)
+      this.getParamsData()
     },
   },
 
