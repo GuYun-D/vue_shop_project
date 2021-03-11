@@ -57,8 +57,6 @@ export default {
 
       // 级联选择框双向绑定到的数据
       selectedOption: [],
-
-      
     }
   },
 
@@ -78,9 +76,18 @@ export default {
     },
 
     // 級聯選擇框選中項變化，會觸發此函數
-      handleChange(){
-          console.log(this.selectedOption);
-      }
+    handleChange() {
+        // console.log(this.selectedOption);
+        // 限制用户只能选择三级分类，利用selectedOption，三级数组长度为3，二级数组长度为2
+        // 选择不是三级分类
+        if(this.selectedOption.length !== 3){
+            this.selectedOption = []
+            return this.$message.error("请选择三级分类")
+        }
+
+        // 选中三级分类
+        console.log(this.selectedOption);
+    },
   },
 }
 </script>
