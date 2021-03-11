@@ -41,11 +41,15 @@
           tab-click：tabs切换时触发
        -->
       <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
-        <el-tab-pane label="动态参数" name="first">
-          <el-button type="primary" size="mini" :disabled="isDisabled">添加参数</el-button>
+        <el-tab-pane label="动态参数" name="many">
+          <el-button type="primary" size="mini" :disabled="isDisabled"
+            >添加参数</el-button
+          >
         </el-tab-pane>
-        <el-tab-pane label="静态属性" name="second">
-          <el-button type="primary" size="mini" :disabled="isDisabled">添加属性</el-button>
+        <el-tab-pane label="静态属性" name="only">
+          <el-button type="primary" size="mini" :disabled="isDisabled"
+            >添加属性</el-button
+          >
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -73,7 +77,7 @@ export default {
       selectedOption: [],
 
       // 默认显示第一个
-      activeName: 'first',
+      activeName: 'many',
     }
   },
 
@@ -93,7 +97,7 @@ export default {
     },
 
     // 級聯選擇框選中項變化，會觸發此函數
-    handleChange() {
+    async handleChange() {
       // console.log(this.selectedOption);
       // 限制用户只能选择三级分类，利用selectedOption，三级数组长度为3，二级数组长度为2
       // 选择不是三级分类
@@ -104,6 +108,15 @@ export default {
 
       // 选中三级分类
       console.log(this.selectedOption)
+
+      // 根据所选的id，当前所处的面板进行发送请求
+      const {data: res} = await this.$http.get(`categories/${this.cateId}/attributes`, { params: {sel: this.activeName} })
+
+      if(res.meta.status !== 200){
+          return this.$message.error("参数列表获取失败")
+      }
+
+      console.log(res.data);
     },
 
     // tab页签点击事件处理函数
@@ -116,12 +129,21 @@ export default {
   computed: {
     // 如果按钮需要被禁用返回true，反之false
     isDisabled() {
-        // 关联selectedOption，监听用户是否选中三级分类
-        if(this.selectedOption.length !== 3){
-            return true
-        }
+      // 关联selectedOption，监听用户是否选中三级分类
+      if (this.selectedOption.length !== 3) {
+        return true
+      }
 
-        return false
+      return false
+    },
+
+    //当前选中的三级分类的id
+    cateId() {
+      if (this.selectedOption.length === 3) {
+        return this.selectedOption[2]
+      }
+
+      return null
     },
   },
 }
