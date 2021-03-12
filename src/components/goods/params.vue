@@ -123,9 +123,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addDialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="addParams">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -165,12 +163,14 @@ export default {
 
       // 添加参数的表单数据对象·
       addForm: {
-        attr_name: ''
+        attr_name: '',
       },
 
       // 添加表单的验证规则对象
       addFormRules: {
-        attr_name: [{required: true, message: "请输入参数名称", trigger: "blur"}],
+        attr_name: [
+          { required: true, message: '请输入参数名称', trigger: 'blur' },
+        ],
       },
     }
   },
@@ -238,10 +238,39 @@ export default {
     },
 
     // 监听添加参数对话框的关闭
-    addDialogClosed(){
+    addDialogClosed() {
       // 重置表单
       this.$refs.addFormRef.resetFields()
-    }
+    },
+
+    // 点击按钮添加参数
+    addParams() {
+      // 表单预验证
+      this.$refs.addFormRef.validate(async (Valid) => {
+        if (!Valid) {
+          // 验证失败
+          return
+        }
+
+        const {data: res} = await this.$http.post(`categories/${this.cateId}/attributes`, {
+          attr_name: this.addForm.attr_name,
+          attr_sel: this.activeName,
+        })
+
+        if(res.meta.status !== 201){
+          return this.$message.error("添加参数失败")
+        }
+        
+        this.addDialogVisible = false
+
+       this.$message.success("参数添加成功")
+
+      //  刷新列表
+      this.getParamsData()
+
+        
+      })
+    },
   },
 
   // 计算属性
