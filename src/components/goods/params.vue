@@ -52,7 +52,13 @@
           <!-- 动态参数表格 -->
           <el-table :data="mangTabData" border stripe>
             <!-- 展开行 -->
-            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="expand">
+              <template slot-scope="scope">
+                <el-tag :key="i" v-for="(item, i) in scope.row.attr_vals" closable>{{
+                  item
+                }}</el-tag>
+              </template>
+            </el-table-column>
             <!-- 索引列 -->
             <el-table-column type="index"></el-table-column>
             <el-table-column
@@ -90,7 +96,7 @@
           <!-- 静态参数表格 -->
           <el-table :data="onlyTabData" border stripe>
             <!-- 展开行 -->
-            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="expand"> </el-table-column>
             <!-- 索引列 -->
             <el-table-column type="index"></el-table-column>
             <el-table-column
@@ -270,8 +276,14 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error('参数列表获取失败')
       }
+      console.log(res.data)
 
-      // console.log(res.data)
+      // 将字符串变成数组
+      res.data.forEach((item) => {
+        item.attr_vals = item.attr_vals.split(' ')
+      })
+
+      console.log(res.data)
       // 获取到的数据需要进行判断，是属于静态数据还是动态数据
       if (this.activeName === 'many') {
         this.mangTabData = res.data
@@ -448,5 +460,9 @@ export default {
 <style scoped>
 .cat_opt {
   margin: 15px 0;
+}
+
+.el-tag{
+  margin: 10px;
 }
 </style>
