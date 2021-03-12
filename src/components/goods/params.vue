@@ -69,8 +69,8 @@
                  -->
                 <el-input
                   class="input-new-tag"
-                  v-if="inputVisible"
-                  v-model="inputValue"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
                   ref="saveTagInput"
                   size="small"
                   @keyup.enter.native="handleInputConfirm"
@@ -84,7 +84,7 @@
                   v-else
                   class="button-new-tag"
                   size="small"
-                  @click="showInput"
+                  @click="showInput(scope.row)"
                   >+ New Tag</el-button
                 >
               </template>
@@ -318,6 +318,11 @@ export default {
       res.data.forEach((item) => {
         // 对当前atr_vals进行判断是否为空，否则展开会出现空标签
         item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') : []
+
+        // 在动态编辑标签时，由于所有的都是用的是inputVisible这同一个，导致所有的动态编辑标签同时联动
+        // 为每一个参数都添加这两个属性
+        item.inputVisible = false
+        item.inputValue = ''
       })
 
       console.log(res.data)
@@ -464,8 +469,8 @@ export default {
     handleInputConfirm() {},
 
     // 点击按钮显示文本输入框
-    showInput() {
-      this.inputVisible = true
+    showInput(row) {
+      row.inputVisible = true
     },
   },
 
