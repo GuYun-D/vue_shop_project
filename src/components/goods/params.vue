@@ -61,7 +61,11 @@
             ></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="primary" icon="el-icon-edit" size="mini"
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="mini"
+                  @click="showEditDialog"
                   >编辑</el-button
                 >
                 <el-button type="danger" icon="el-icon-delete" size="mini"
@@ -91,7 +95,11 @@
             ></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="primary" icon="el-icon-edit" size="mini"
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="mini"
+                  @click="showEditDialog"
                   >编辑</el-button
                 >
                 <el-button type="danger" icon="el-icon-delete" size="mini"
@@ -124,6 +132,29 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addParams">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 修改对话框 -->
+    <el-dialog
+      :title="'修改' + titleText"
+      :visible.sync="editDialogVisible"
+      width="50%"
+      @close="editDialogClosed"
+    >
+      <el-form
+        :model="editForm"
+        :rules="editFormRules"
+        ref="editFormRef"
+        label-width="100px"
+      >
+        <el-form-item :label="titleText" prop="attr_name">
+          <el-input v-model="editForm.attr_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editParams">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -168,6 +199,19 @@ export default {
 
       // 添加表单的验证规则对象
       addFormRules: {
+        attr_name: [
+          { required: true, message: '请输入参数名称', trigger: 'blur' },
+        ],
+      },
+
+      // 控制修改对话框
+      editDialogVisible: false,
+
+      // 修改的表单数据对象
+      editForm: {},
+
+      // 修改表单的验证规则
+      editFormRules: {
         attr_name: [
           { required: true, message: '请输入参数名称', trigger: 'blur' },
         ],
@@ -252,25 +296,39 @@ export default {
           return
         }
 
-        const {data: res} = await this.$http.post(`categories/${this.cateId}/attributes`, {
-          attr_name: this.addForm.attr_name,
-          attr_sel: this.activeName,
-        })
+        const { data: res } = await this.$http.post(
+          `categories/${this.cateId}/attributes`,
+          {
+            attr_name: this.addForm.attr_name,
+            attr_sel: this.activeName,
+          }
+        )
 
-        if(res.meta.status !== 201){
-          return this.$message.error("添加参数失败")
+        if (res.meta.status !== 201) {
+          return this.$message.error('添加参数失败')
         }
-        
+
         this.addDialogVisible = false
 
-       this.$message.success("参数添加成功")
+        this.$message.success('参数添加成功')
 
-      //  刷新列表
-      this.getParamsData()
-
-        
+        //  刷新列表
+        this.getParamsData()
       })
     },
+
+    // 点击按钮显示修改的对话框
+    showEditDialog() {
+      this.editDialogVisible = true
+    },
+
+    // 监听对话框关闭，重置表单
+    editDialogClosed() {
+      this.$refs.editFormRef.resetFields()
+    },
+
+    // 点击按钮，修改参数信息
+    editParams(){}
   },
 
   // 计算属性
