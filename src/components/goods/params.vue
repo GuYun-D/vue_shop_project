@@ -42,7 +42,11 @@
        -->
       <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
         <el-tab-pane label="动态参数" name="many">
-          <el-button type="primary" size="mini" :disabled="isDisabled"
+          <el-button
+            type="primary"
+            size="mini"
+            :disabled="isDisabled"
+            @click="addDialogVisible = true"
             >添加参数</el-button
           >
           <!-- 动态参数表格 -->
@@ -51,17 +55,28 @@
             <el-table-column type="expand"></el-table-column>
             <!-- 索引列 -->
             <el-table-column type="index"></el-table-column>
-            <el-table-column label="参数名称" prop="attr_name"></el-table-column>
+            <el-table-column
+              label="参数名称"
+              prop="attr_name"
+            ></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
-                <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini"
+                  >编辑</el-button
+                >
+                <el-button type="danger" icon="el-icon-delete" size="mini"
+                  >删除</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="静态属性" name="only">
-          <el-button type="primary" size="mini" :disabled="isDisabled"
+          <el-button
+            type="primary"
+            size="mini"
+            :disabled="isDisabled"
+            @click="addDialogVisible = true"
             >添加属性</el-button
           >
           <!-- 静态参数表格 -->
@@ -70,17 +85,49 @@
             <el-table-column type="expand"></el-table-column>
             <!-- 索引列 -->
             <el-table-column type="index"></el-table-column>
-            <el-table-column label="属性名称" prop="attr_name"></el-table-column>
+            <el-table-column
+              label="属性名称"
+              prop="attr_name"
+            ></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
-                <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini"
+                  >编辑</el-button
+                >
+                <el-button type="danger" icon="el-icon-delete" size="mini"
+                  >删除</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
     </el-card>
+
+    <!-- 添加参数的对话框-->
+    <el-dialog
+      :title="'添加' + titleText"
+      :visible.sync="addDialogVisible"
+      width="50%"
+      @close="addDialogClosed"
+    >
+      <el-form
+        :model="addForm"
+        :rules="addFormRules"
+        ref="addFormRef"
+        label-width="100px"
+      >
+        <el-form-item :label="titleText" prop="attr_name">
+          <el-input v-model="addForm.attr_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addDialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -112,6 +159,19 @@ export default {
 
       // 静态属性的数据
       onlyTabData: [],
+
+      // 控制对话框
+      addDialogVisible: false,
+
+      // 添加参数的表单数据对象·
+      addForm: {
+        attr_name: ''
+      },
+
+      // 添加表单的验证规则对象
+      addFormRules: {
+        attr_name: [{required: true, message: "请输入参数名称", trigger: "blur"}],
+      },
     }
   },
 
@@ -167,8 +227,8 @@ export default {
         this.onlyTabData = res.data
       }
 
-      console.log("参数数据：" + this.mangTabData);
-      console.log("参数数据：" + this.onlyTabData);
+      console.log('参数数据：' + this.mangTabData)
+      console.log('参数数据：' + this.onlyTabData)
     },
 
     // tab页签点击事件处理函数
@@ -176,6 +236,12 @@ export default {
       //   console.log(this.activeName)
       this.getParamsData()
     },
+
+    // 监听添加参数对话框的关闭
+    addDialogClosed(){
+      // 重置表单
+      this.$refs.addFormRef.resetFields()
+    }
   },
 
   // 计算属性
@@ -197,6 +263,15 @@ export default {
       }
 
       return null
+    },
+
+    // 动态计算标题的文本
+    titleText() {
+      if (this.activeName === 'mang') {
+        return '动态参数'
+      }
+
+      return '静态属性'
     },
   },
 }
