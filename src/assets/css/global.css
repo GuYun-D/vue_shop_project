@@ -1,20 +1,21 @@
 /* 全局样式表 */
-html,
-body,
-#app{
+
+html, body, #app {
     height: 100%;
     padding: 0;
     margin: 0;
     min-width: 1260px;
+    overflow-y: hidden;
 }
 
 /* 定义面包屑样式 */
-.el-breadcrumb{
+
+.el-breadcrumb {
     margin-bottom: 15px;
     font-size: 12px;
 }
 
-.el-table{
+.el-table {
     top: 15px;
     font-size: 12px;
 }
