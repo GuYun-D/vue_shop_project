@@ -54,11 +54,38 @@
             <!-- 展开行 -->
             <el-table-column type="expand">
               <template slot-scope="scope">
+                <!-- 循环渲染tag标签 -->
                 <el-tag
                   :key="i"
                   v-for="(item, i) in scope.row.attr_vals"
                   closable
                   >{{ item }}</el-tag
+                >
+
+                <!-- 动态编辑标签 -->
+                <!-- 
+                  v-if是控制文本框和按钮的切换
+                  handleInputConfirm: 无论是按了回车还是失去焦点都会触发
+                 -->
+                <el-input
+                  class="input-new-tag"
+                  v-if="inputVisible"
+                  v-model="inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm"
+                >
+                </el-input>
+                <!-- 
+                  showInput：显示文本框
+                 -->
+                <el-button
+                  v-else
+                  class="button-new-tag"
+                  size="small"
+                  @click="showInput"
+                  >+ New Tag</el-button
                 >
               </template>
             </el-table-column>
@@ -233,6 +260,12 @@ export default {
           { required: true, message: '请输入参数名称', trigger: 'blur' },
         ],
       },
+
+      // 控制按钮和文本框的切换，默认显示按钮
+      inputVisible: false,
+
+      // 动态标签输入的内容
+      inputValue: '',
     }
   },
 
@@ -426,6 +459,14 @@ export default {
 
       this.getParamsData()
     },
+
+    // 文本框失去焦点或按下回车
+    handleInputConfirm() {},
+
+    // 点击按钮显示文本输入框
+    showInput() {
+      this.inputVisible = true
+    },
   },
 
   // 计算属性
@@ -468,5 +509,9 @@ export default {
 
 .el-tag {
   margin: 10px;
+}
+
+.input-new-tag {
+  width: 120px;
 }
 </style>
