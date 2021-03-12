@@ -54,9 +54,12 @@
             <!-- 展开行 -->
             <el-table-column type="expand">
               <template slot-scope="scope">
-                <el-tag :key="i" v-for="(item, i) in scope.row.attr_vals" closable>{{
-                  item
-                }}</el-tag>
+                <el-tag
+                  :key="i"
+                  v-for="(item, i) in scope.row.attr_vals"
+                  closable
+                  >{{ item }}</el-tag
+                >
               </template>
             </el-table-column>
             <!-- 索引列 -->
@@ -280,7 +283,8 @@ export default {
 
       // 将字符串变成数组
       res.data.forEach((item) => {
-        item.attr_vals = item.attr_vals.split(' ')
+        // 对当前atr_vals进行判断是否为空，否则展开会出现空标签
+        item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') : []
       })
 
       console.log(res.data)
@@ -462,7 +466,7 @@ export default {
   margin: 15px 0;
 }
 
-.el-tag{
+.el-tag {
   margin: 10px;
 }
 </style>
