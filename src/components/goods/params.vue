@@ -342,7 +342,29 @@ export default {
     },
 
     // 点击按钮，修改参数信息
-    editParams() {},
+    editParams() {
+      // 表单预校验
+      this.$refs.editFormRef.validate( async valid => {
+        if(!valid){
+          return this.$message.error("修改失败")
+        }
+
+        const {data: res} = await this.$http.put(`categories/${this.cateId}/attributes/${this.editForm.attr_id}`, {
+          attr_name: this.editForm.attr_name,
+          attr_sel: this.activeName
+        })
+
+        if(res.meta.status !== 200){
+          return this.$message.error("参数修改失败")
+        }
+
+        this.$message.success("参数修改成功")
+
+        this.getParamsData()
+
+        this.editDialogVisible = false
+      })
+    },
   },
 
   // 计算属性
