@@ -45,11 +45,39 @@
           <el-button type="primary" size="mini" :disabled="isDisabled"
             >添加参数</el-button
           >
+          <!-- 动态参数表格 -->
+          <el-table :data="mangTabData" border stripe>
+            <!-- 展开行 -->
+            <el-table-column type="expand"></el-table-column>
+            <!-- 索引列 -->
+            <el-table-column type="index"></el-table-column>
+            <el-table-column label="参数名称" prop="attr_name"></el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
         <el-tab-pane label="静态属性" name="only">
           <el-button type="primary" size="mini" :disabled="isDisabled"
             >添加属性</el-button
           >
+          <!-- 静态参数表格 -->
+          <el-table :data="onlyTabData" border stripe>
+            <!-- 展开行 -->
+            <el-table-column type="expand"></el-table-column>
+            <!-- 索引列 -->
+            <el-table-column type="index"></el-table-column>
+            <el-table-column label="属性名称" prop="attr_name"></el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -78,6 +106,12 @@ export default {
 
       // 默认显示第一个
       activeName: 'many',
+
+      // 动态属性数据
+      mangTabData: [],
+
+      // 静态属性的数据
+      onlyTabData: [],
     }
   },
 
@@ -125,7 +159,16 @@ export default {
         return this.$message.error('参数列表获取失败')
       }
 
-      console.log(res.data)
+      // console.log(res.data)
+      // 获取到的数据需要进行判断，是属于静态数据还是动态数据
+      if (this.activeName === 'many') {
+        this.mangTabData = res.data
+      } else {
+        this.onlyTabData = res.data
+      }
+
+      console.log("参数数据：" + this.mangTabData);
+      console.log("参数数据：" + this.onlyTabData);
     },
 
     // tab页签点击事件处理函数
