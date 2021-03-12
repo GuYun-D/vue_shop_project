@@ -68,7 +68,11 @@
                   @click="showEditDialog(scope.row.attr_id)"
                   >编辑</el-button
                 >
-                <el-button type="danger" icon="el-icon-delete" size="mini"
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  size="mini"
+                  @click="removeParams(scope.row.attr_id)"
                   >删除</el-button
                 >
               </template>
@@ -102,7 +106,11 @@
                   @click="showEditDialog(scope.row.attr_id)"
                   >编辑</el-button
                 >
-                <el-button type="danger" icon="el-icon-delete" size="mini"
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  size="mini"
+                  @click="removeParams(scope.row.attr_id)"
                   >删除</el-button
                 >
               </template>
@@ -320,14 +328,17 @@ export default {
     // 点击按钮显示修改的对话框
     async showEditDialog(attr_id) {
       // 查询当前参数的信息
-      const {data: res} = await this.$http.get(`categories/${this.cateId}/attributes/${attr_id}`, {
-        params: {
-          attr_sel: this.activeName,
-        },
-      })
+      const { data: res } = await this.$http.get(
+        `categories/${this.cateId}/attributes/${attr_id}`,
+        {
+          params: {
+            attr_sel: this.activeName,
+          },
+        }
+      )
 
-      if(res.meta.status !== 200){
-        return this.$message.error("获取参数信息失败")
+      if (res.meta.status !== 200) {
+        return this.$message.error('获取参数信息失败')
       }
 
       // this.$message.success("获取参数信息成功")
@@ -344,26 +355,60 @@ export default {
     // 点击按钮，修改参数信息
     editParams() {
       // 表单预校验
-      this.$refs.editFormRef.validate( async valid => {
-        if(!valid){
-          return this.$message.error("修改失败")
+      this.$refs.editFormRef.validate(async (valid) => {
+        if (!valid) {
+          return this.$message.error('修改失败')
         }
 
-        const {data: res} = await this.$http.put(`categories/${this.cateId}/attributes/${this.editForm.attr_id}`, {
-          attr_name: this.editForm.attr_name,
-          attr_sel: this.activeName
-        })
+        const { data: res } = await this.$http.put(
+          `categories/${this.cateId}/attributes/${this.editForm.attr_id}`,
+          {
+            attr_name: this.editForm.attr_name,
+            attr_sel: this.activeName,
+          }
+        )
 
-        if(res.meta.status !== 200){
-          return this.$message.error("参数修改失败")
+        if (res.meta.status !== 200) {
+          return this.$message.error('参数修改失败')
         }
 
-        this.$message.success("参数修改成功")
+        this.$message.success('参数修改成功')
 
         this.getParamsData()
 
         this.editDialogVisible = false
       })
+    },
+
+    // 删除属性
+    async removeParams(attr_id) {
+      // elementui messagebox确认消息
+      const confirmResult = await this.$confirm(
+        '此操作将永久删除该参数, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).catch((err) => err)
+
+      if (confirmResult !== 'confirm') {
+        return this.$message.info('已取消删除')
+      }
+
+      // 删除
+      const { data: res } = await this.$http.delete(
+        `categories/${this.cateId}/attributes/${attr_id}`
+      )
+
+      if (res.meta.status !== 200) {
+        return this.$message.error('删除失败')
+      }
+
+      this.$message.success('删除成功')
+
+      this.getParamsData()
     },
   },
 
