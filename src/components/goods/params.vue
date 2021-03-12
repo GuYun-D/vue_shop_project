@@ -65,7 +65,7 @@
                   type="primary"
                   icon="el-icon-edit"
                   size="mini"
-                  @click="showEditDialog"
+                  @click="showEditDialog(scope.row.attr_id)"
                   >编辑</el-button
                 >
                 <el-button type="danger" icon="el-icon-delete" size="mini"
@@ -99,7 +99,7 @@
                   type="primary"
                   icon="el-icon-edit"
                   size="mini"
-                  @click="showEditDialog"
+                  @click="showEditDialog(scope.row.attr_id)"
                   >编辑</el-button
                 >
                 <el-button type="danger" icon="el-icon-delete" size="mini"
@@ -318,7 +318,21 @@ export default {
     },
 
     // 点击按钮显示修改的对话框
-    showEditDialog() {
+    async showEditDialog(attr_id) {
+      // 查询当前参数的信息
+      const {data: res} = await this.$http.get(`categories/${this.cateId}/attributes/${attr_id}`, {
+        params: {
+          attr_sel: this.activeName,
+        },
+      })
+
+      if(res.meta.status !== 200){
+        return this.$message.error("获取参数信息失败")
+      }
+
+      // this.$message.success("获取参数信息成功")
+      this.editForm = res.data
+
       this.editDialogVisible = true
     },
 
@@ -328,7 +342,7 @@ export default {
     },
 
     // 点击按钮，修改参数信息
-    editParams(){}
+    editParams() {},
   },
 
   // 计算属性
