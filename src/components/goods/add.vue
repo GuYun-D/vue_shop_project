@@ -42,13 +42,31 @@
         步骤条接收number类型，activeIndex - 0转为数字
         tab栏接受string类型
      -->
-    <el-tabs v-model="activeIndex" :tab-position="'left'" style="height: 200px">
-      <el-tab-pane label="基本信息" name="0">基本信息</el-tab-pane>
-      <el-tab-pane label="商品参数" name="1">商品参数</el-tab-pane>
-      <el-tab-pane label="商品属性" name="2">商品属性</el-tab-pane>
-      <el-tab-pane label="商品图片" name="3">商品图片</el-tab-pane>
-      <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
-    </el-tabs>
+    <!-- 
+         labe-position：label位置
+      -->
+    <!-- 
+          五个tab栏的表单要同时提交，所以在五个的最外层添加表单控件
+       -->
+    <el-form
+      :model="addForm"
+      :rules="addFormRules"
+      ref="ruleFormRef"
+      label-width="100px"
+      labe-position="top"
+    >
+      <el-tabs
+        v-model="activeIndex"
+        :tab-position="'left'"
+        style="height: 200px"
+      >
+        <el-tab-pane label="基本信息" name="0">基本信息</el-tab-pane>
+        <el-tab-pane label="商品参数" name="1">商品参数</el-tab-pane>
+        <el-tab-pane label="商品属性" name="2">商品属性</el-tab-pane>
+        <el-tab-pane label="商品图片" name="3">商品图片</el-tab-pane>
+        <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
+      </el-tabs>
+    </el-form>
   </div>
 </template>
 
@@ -57,6 +75,12 @@ export default {
   data() {
     return {
       activeIndex: '0',
+
+      // 添加商品的表单数据对象
+      addForm: {},
+
+      // 表单的验证规则
+      addFormRules: {},
     }
   },
 
