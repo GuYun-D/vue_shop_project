@@ -471,6 +471,17 @@ export default {
     // 点击按钮显示文本输入框
     showInput(row) {
       row.inputVisible = true
+
+// 自动获取焦点
+/**
+$nextTick:当页面上的元素被重新渲染后，调用回调函数。
+          页面加载出来之后，显示的是tag标签而不是input，
+  
+          直接使用this.$refs.saveTagInput.$refs.input.focus()，会导致无法找到该元素而报错，因为还没有渲染出来
+ */
+this.$nextTick(_ => {
+  this.$refs.saveTagInput.$refs.input.focus()
+})
     },
   },
 
