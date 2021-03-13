@@ -7,6 +7,10 @@ html, body, #app {
     min-width: 1260px;
 }
 
+#app{
+    overflow-y: hidden;
+}
+
 /* 定义面包屑样式 */
 
 .el-breadcrumb {
