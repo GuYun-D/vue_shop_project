@@ -73,8 +73,8 @@
                   v-model="scope.row.inputValue"
                   ref="saveTagInput"
                   size="small"
-                  @keyup.enter.native="handleInputConfirm"
-                  @blur="handleInputConfirm"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)"
                 >
                 </el-input>
                 <!-- 
@@ -466,22 +466,29 @@ export default {
     },
 
     // 文本框失去焦点或按下回车
-    handleInputConfirm() {},
+    handleInputConfirm(row) {
+        if (row.inputValue.trim().length === 0) {
+        row.inputValue = ''
+        row.inputVisible = false
+        return
+      }
+
+      // 如果没有return，证明用户输入了正式数据
+    },
 
     // 点击按钮显示文本输入框
     showInput(row) {
       row.inputVisible = true
 
-// 自动获取焦点
-/**
-$nextTick:当页面上的元素被重新渲染后，调用回调函数。
-          页面加载出来之后，显示的是tag标签而不是input，
-  
-          直接使用this.$refs.saveTagInput.$refs.input.focus()，会导致无法找到该元素而报错，因为还没有渲染出来
+      // 自动获取焦点
+      /**
+        $nextTick:当页面上的元素被重新渲染后，调用回调函数。
+                  面加载出来之后，显示的是tag标签而不是input，
+                  直接使用this.$refs.saveTagInput.$refs.input.focus()，会导致无法找到该元素而报错，因为还没有渲染出来
  */
-this.$nextTick(_ => {
-  this.$refs.saveTagInput.$refs.input.focus()
-})
+      this.$nextTick((_) => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
     },
   },
 
