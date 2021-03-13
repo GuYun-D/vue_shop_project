@@ -288,6 +288,7 @@ export default {
 
     // 級聯選擇框選中項變化，會觸發此函數
     handleChange() {
+
       this.getParamsData()
     },
 
@@ -297,6 +298,8 @@ export default {
       // 选择不是三级分类
       if (this.selectedOption.length !== 3) {
         this.selectedOption = []
+        this.mangTabData = []
+        this.onlyTabData = []
         return this.$message.error('请选择三级分类')
       }
 
