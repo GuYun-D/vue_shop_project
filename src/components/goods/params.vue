@@ -205,6 +205,7 @@
 </template>
 
 <script>
+import rolesVue from '../power/roles.vue'
 export default {
   data() {
     return {
@@ -466,14 +467,30 @@ export default {
     },
 
     // 文本框失去焦点或按下回车
-    handleInputConfirm(row) {
+    async handleInputConfirm(row) {
         if (row.inputValue.trim().length === 0) {
         row.inputValue = ''
         row.inputVisible = false
         return
       }
 
-      // 如果没有return，证明用户输入了正式数据
+      // 如果没有return，证明用户输入了正式数据,存入数据
+      // 可选参数就是循环本参数下的attr_vals,蓑衣将新添加的可选参数添加到这个数组中
+      row.attr_vals.push(row.inputValue.trim())
+      row.inputValue = ''
+      row.inputVisible = false
+
+      const {data: res} = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`, {
+        attr_name: row.attr_name,
+        attr_sel: row.attr_sel,
+        attr_vals: row.attr_vals.join(" ")
+      })
+
+      if(res.meta.status !== 200){
+        return this.$message.error("修改失败")
+      }
+
+      this.$message.success("修改成功")
     },
 
     // 点击按钮显示文本输入框
