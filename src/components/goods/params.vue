@@ -59,6 +59,7 @@
                   :key="i"
                   v-for="(item, i) in scope.row.attr_vals"
                   closable
+                  @close="handleClose(i, scope.row)"
                   >{{ item }}</el-tag
                 >
 
@@ -468,7 +469,7 @@ export default {
 
     // 文本框失去焦点或按下回车
     async handleInputConfirm(row) {
-        if (row.inputValue.trim().length === 0) {
+      if (row.inputValue.trim().length === 0) {
         row.inputValue = ''
         row.inputVisible = false
         return
@@ -480,17 +481,25 @@ export default {
       row.inputValue = ''
       row.inputVisible = false
 
-      const {data: res} = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`, {
-        attr_name: row.attr_name,
-        attr_sel: row.attr_sel,
-        attr_vals: row.attr_vals.join(" ")
-      })
+      this.saveAttrVals(row)
+    },
 
-      if(res.meta.status !== 200){
-        return this.$message.error("修改失败")
+    // 向后端发起请求，保存修改的attr_vals
+    async saveAttrVals(row) {
+      const { data: res } = await this.$http.put(
+        `categories/${this.cateId}/attributes/${row.attr_id}`,
+        {
+          attr_name: row.attr_name,
+          attr_sel: row.attr_sel,
+          attr_vals: row.attr_vals.join(' '),
+        }
+      )
+
+      if (res.meta.status !== 200) {
+        return this.$message.error('修改失败')
       }
 
-      this.$message.success("修改成功")
+      this.$message.success('修改成功')
     },
 
     // 点击按钮显示文本输入框
@@ -506,6 +515,12 @@ export default {
       this.$nextTick((_) => {
         this.$refs.saveTagInput.$refs.input.focus()
       })
+    },
+
+    // 删除可选参数,根据id
+    handleClose(i, row) {
+      row.attr_vals.splice(i, 1)
+      this.saveAttrVals(row)
     },
   },
 
