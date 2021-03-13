@@ -11,8 +11,17 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getGoodsList">
-            <el-button slot="append" icon="el-icon-search" @click="getGoodsList"></el-button>
+          <el-input
+            placeholder="请输入内容"
+            v-model="queryInfo.query"
+            clearable
+            @clear="getGoodsList"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="getGoodsList"
+            ></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -52,6 +61,7 @@
               class="el-icon-delete"
               type="danger"
               size="mini"
+              @click="removeById(scope.row.goods_id)"
             ></el-button>
           </template>
         </el-table-column>
@@ -114,28 +124,52 @@ export default {
         return this.$message.error('获取商品列表失败')
       }
 
-      this.$message.success('获取商品列表成功')
+      // this.$message.success('获取商品列表成功')
 
       this.goodslist = res.data.goods
 
       this.total = res.data.total
     },
 
-    handleSizeChange(newSize){
+    handleSizeChange(newSize) {
       this.queryInfo.pagesize = newSize
       this.getGoodsList()
     },
 
-    handleCurrentChange(newPage){
+    handleCurrentChange(newPage) {
       this.queryInfo.pagenum = newPage
       this.getGoodsList()
-    }
+    },
+
+    async removeById(id) {
+      const confirmResult = await this.$confirm(
+        '此操作将永久删除该商品, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).catch((err) => err)
+
+      if (confirmResult !== 'confirm') {
+        return this.$message.error('删除已取消')
+      }
+
+      const { data: res } = await this.$http.delete(`goods/${id}`)
+
+      if (res.meta.status !== 200) {
+        return this.$message.error('删除失败')
+      }
+      this.$message.success('成功删除')
+      this.getGoodsList()
+    },
   },
 }
 </script>
 
 <style scoped>
-  .el-pagination{
-    margin-top: 40px;
-  }
+.el-pagination {
+  margin-top: 40px;
+}
 </style>
