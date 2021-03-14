@@ -57,7 +57,6 @@
         <el-tabs
           v-model="activeIndex"
           :tab-position="'left'"
-          style="height: 200px"
         >
           <el-tab-pane label="基本信息" name="0">
             <el-form-item label="商品名称" prop="goods_name">
