@@ -188,6 +188,9 @@ export default {
 
       // 动态参数列表获取
       manyTableData: [],
+
+      // 静态属性列表获取
+      onlyTableData: [],
     }
   },
 
@@ -255,6 +258,23 @@ export default {
         })
 
         this.manyTableData = res.data
+      } else if (this.activeIndex === '2') {
+        const { data: res } = await this.$http.get(
+          `categories/${this.cateIde}/attributes`,
+          {
+            params: {
+              sel: 'only',
+            },
+          }
+        )
+
+        if (res.meta.status !== 200) {
+          return this.$message.error('获取动态参数列表失败')
+        }
+
+        console.log(res.data)
+
+        this.onlyTableData = res.data
       }
     },
   },
@@ -273,6 +293,6 @@ export default {
 
 <style scoped>
 .el-checkbox {
-  margin: 5px 10px 0 0!important;
+  margin: 5px 10px 0 0 !important;
 }
 </style>
