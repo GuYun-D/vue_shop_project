@@ -54,10 +54,7 @@
         label-width="100px"
         label-position="top"
       >
-        <el-tabs
-          v-model="activeIndex"
-          :tab-position="'left'"
-        >
+        <el-tabs v-model="activeIndex" :tab-position="'left'">
           <el-tab-pane label="基本信息" name="0">
             <el-form-item label="商品名称" prop="goods_name">
               <el-input v-model="addForm.goods_name"></el-input>
@@ -93,7 +90,7 @@ export default {
         goods_name: '',
         goods_price: 0,
         goods_weight: 0,
-        goods_number: 0
+        goods_number: 0,
       },
 
       // 表单的验证规则
@@ -131,13 +128,30 @@ export default {
         ],
       },
 
-      //
+      // 商品分类列表
+      cateList: [],
     }
   },
 
-  created() {},
+  created() {
+    this.getCateList()
+  },
 
-  methods() {},
+  methods: {
+    // 获取所有商品分类数据
+    async getCateList() {
+      const { data: res } = await this.$http.get('categories')
+      if (res.meta.status !== 200) {
+        return this.$message.error('获取所有商品分类数据失败')
+      }
+
+      this.$message.success('获取所有商品分类数据成功')
+
+      this.cateList = res.data
+
+      console.log(this.cateList);
+    },
+  },
 }
 </script>
 
