@@ -54,7 +54,14 @@
         label-width="100px"
         label-position="top"
       >
-        <el-tabs v-model="activeIndex" :tab-position="'left'">
+        <!-- 
+          before-leave: tab栏切换触发
+        -->
+        <el-tabs
+          v-model="activeIndex"
+          :tab-position="'left'"
+          :before-leave="beforeTabLeave"
+        >
           <el-tab-pane label="基本信息" name="0">
             <el-form-item label="商品名称" prop="goods_name">
               <el-input v-model="addForm.goods_name"></el-input>
@@ -184,11 +191,21 @@ export default {
     // 级联选选择器选中项发生变化会触发这个函数
     handleChange() {
       console.log(this.addForm.goods_cat)
-      if(this.addForm.goods_cat.length != 3){
+      if (this.addForm.goods_cat.length != 3) {
         this.addForm.goods_cat = []
-        return this.$message.error("请选择三级分类")
+        return this.$message.error('请选择三级分类')
       }
     },
+
+    beforeTabLeave(activeName, oldActiveName){
+      console.log("即将离开的是" + oldActiveName);
+      console.log("即将进入的是" + activeName);
+
+      if(oldActiveName === 0 || this.addForm.goods_cat.length !== 3){
+        this.$message.error("请先选择商品分类")
+        return false
+      } 
+    }
   },
 }
 </script>
