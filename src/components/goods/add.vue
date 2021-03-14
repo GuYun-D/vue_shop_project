@@ -56,11 +56,13 @@
       >
         <!-- 
           before-leave: tab栏切换触发
+          tab-click:tab 被选中时触发
         -->
         <el-tabs
           v-model="activeIndex"
           :tab-position="'left'"
           :before-leave="beforeTabLeave"
+          @tab-click="tabClicked"
         >
           <el-tab-pane label="基本信息" name="0">
             <el-form-item label="商品名称" prop="goods_name">
@@ -166,6 +168,9 @@ export default {
         // 哪个节点实现父子嵌套
         children: 'children',
       },
+
+      // 动态参数列表获取
+      manyTableData: []
     }
   },
 
@@ -197,15 +202,49 @@ export default {
       }
     },
 
-    beforeTabLeave(activeName, oldActiveName){
-      console.log("即将离开的是" + oldActiveName);
-      console.log("即将进入的是" + activeName);
+    // 阻止标签页跳转
+    beforeTabLeave(activeName, oldActiveName) {
+      console.log('即将离开的是' + oldActiveName)
+      console.log('即将进入的是' + activeName)
 
-      if(oldActiveName === 0 || this.addForm.goods_cat.length !== 3){
-        this.$message.error("请先选择商品分类")
+      if (oldActiveName === 0 || this.addForm.goods_cat.length !== 3) {
+        this.$message.error('请先选择商品分类')
         return false
-      } 
-    }
+      }
+    },
+
+    // tab被选中时触发
+    async tabClicked() {
+      console.log(this.activeIndex)
+      if (this.activeIndex === '1') {
+        const { data: res } = await this.$http.get(
+          `categories/${this.cateIde}/attributes`,
+          {
+            params: {
+              sel: 'many',
+            },
+          }
+        )
+
+        if(res.meta.status !== 200){
+          return this.$message.error("获取动态参数列表失败")
+        }
+
+        console.log(res.data);
+
+        this.manyTableData = res.data
+      }
+    },
+  },
+
+  computed: {
+    cateIde() {
+      if (this.addForm.goods_cat.length === 3) {
+        return this.addForm.goods_cat[2]
+      } else {
+        return null
+      }
+    },
   },
 }
 </script>
