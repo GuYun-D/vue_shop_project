@@ -106,13 +106,30 @@
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="商品属性" name="2">
-            <el-form-item :key="item.attr_id" :label="item.attr_name" v-for="item in onlyTableData">
-              <el-input v-model="item.attr_vals">
-
-              </el-input>
+            <el-form-item
+              :key="item.attr_id"
+              :label="item.attr_name"
+              v-for="item in onlyTableData"
+            >
+              <el-input v-model="item.attr_vals"> </el-input>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品图片" name="3">商品图片</el-tab-pane>
+          <el-tab-pane label="商品图片" name="3">
+            <!-- 图片上传 -->
+            <!-- 
+              action：上个传地址
+              on-preview: 点击预览的图片时触发事件
+              on-remove: 删除图片
+             -->
+            <el-upload
+              :action="uploadUrl"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              list-type="picture"
+            >
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+          </el-tab-pane>
           <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
         </el-tabs>
       </el-form>
@@ -197,6 +214,9 @@ export default {
 
       // 静态属性列表获取
       onlyTableData: [],
+
+      // 图片上传地址
+      uploadUrl: 'http://127.0.0.1:8888/api/private/v1/upload',
     }
   },
 
@@ -283,6 +303,12 @@ export default {
         this.onlyTableData = res.data
       }
     },
+
+    // 点击预览的图片时触发事件
+    handlePreview() {},
+
+    // 删除图片的操作
+    handleRemove() {},
   },
 
   computed: {
