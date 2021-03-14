@@ -184,6 +184,10 @@ export default {
     // 级联选选择器选中项发生变化会触发这个函数
     handleChange() {
       console.log(this.addForm.goods_cat)
+      if(this.addForm.goods_cat.length != 3){
+        this.addForm.goods_cat = []
+        return this.$message.error("请选择三级分类")
+      }
     },
   },
 }
