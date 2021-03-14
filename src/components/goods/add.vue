@@ -68,6 +68,15 @@
             <el-form-item label="商品数量" prop="goods_number">
               <el-input v-model="addForm.goods_number" type="number"></el-input>
             </el-form-item>
+            <el-form-item label="商品分类" prop="goods_cat">
+              <el-cascader
+                v-model="addForm.goods_cat"
+                :options="cateList"
+                :props="cateProps"
+                expand-trigger="hover"
+                @change="handleChange"
+              ></el-cascader>
+            </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="商品参数" name="1">商品参数</el-tab-pane>
           <el-tab-pane label="商品属性" name="2">商品属性</el-tab-pane>
@@ -91,6 +100,8 @@ export default {
         goods_price: 0,
         goods_weight: 0,
         goods_number: 0,
+        // 商品所属的分类
+        goods_cat: [],
       },
 
       // 表单的验证规则
@@ -126,10 +137,28 @@ export default {
             trigger: 'blur',
           },
         ],
+
+        goods_cat: [
+          {
+            required: true,
+            message: '请选择三级分类',
+            trigger: 'blur',
+          },
+        ],
       },
 
       // 商品分类列表
       cateList: [],
+
+      //
+      cateProps: {
+        // 看到的是谁
+        label: 'cat_name',
+        // 选中的是谁
+        value: 'cat_id',
+        // 哪个节点实现父子嵌套
+        children: 'children',
+      },
     }
   },
 
@@ -149,7 +178,12 @@ export default {
 
       this.cateList = res.data
 
-      console.log(this.cateList);
+      console.log(this.cateList)
+    },
+
+    // 级联选选择器选中项发生变化会触发这个函数
+    handleChange() {
+      console.log(this.addForm.goods_cat)
     },
   },
 }
