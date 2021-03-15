@@ -120,12 +120,20 @@
               action：上个传地址
               on-preview: 点击预览的图片时触发事件
               on-remove: 删除图片
+              headers: 设置请求头
              -->
+            <!-- 
+              点击图片上传之后，后台传回的数据显示：
+               {data: null, meta: {msg: "无效token", status: 400}}
+               在axios中配置了token，返回数据说token无效，说明该组件上传图片没有使用axios发ajax
+               该组件自己封装了ajax
+              -->
             <el-upload
               :action="uploadUrl"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               list-type="picture"
+              :headers="headersObj"
             >
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
@@ -217,6 +225,11 @@ export default {
 
       // 图片上传地址
       uploadUrl: 'http://127.0.0.1:8888/api/private/v1/upload',
+
+      // 图片上传请求头
+      headersObj: {
+        Authorization: window.sessionStorage.getItem('token'),
+      },
     }
   },
 
