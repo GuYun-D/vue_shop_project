@@ -394,11 +394,17 @@ export default {
 
     // 添加商品
     add() {
-      this.$refs.addFormRef.validate((val) => {
-        if (!val) {
-          return this.$message.error('请填写必要的表单项！')
-        }
-      })
+      // this.$refs.addFormRef.validate((val) => {
+      //   if (!val) {
+      //     return this.$message.error('请填写必要的表单项！')
+      //   }
+
+      //   // 向后端发送请求时，goods_cat必须是逗号分隔的字符串
+      //   this.addForm.goods_cat = this.addForm.goods_cat.join(',')
+      // })
+      this.addForm.goods_cat = this.addForm.goods_cat.join(',')
+
+      // console.log(this.addForm.goods_cat.join(','));
     },
   },
 
