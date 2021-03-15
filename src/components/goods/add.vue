@@ -128,12 +128,19 @@
                在axios中配置了token，返回数据说token无效，说明该组件上传图片没有使用axios发ajax
                该组件自己封装了ajax
               -->
+            <!-- 
+                data: {tmp_path: "tmp_uploads\1d12ebc720396a9eef5cd374b7a6638d.jpg",…}
+                      tmp_path: "tmp_uploads\1d12ebc720396a9eef5cd374b7a6638d.jpg"
+                      url: "http://127.0.0.1:8888/tmp_uploads\1d12ebc720396a9eef5cd374b7a6638d.jpg"
+                上传图片成功之后，后台返回数据，临时路径
+               -->
             <el-upload
               :action="uploadUrl"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               list-type="picture"
               :headers="headersObj"
+              :on-success="handleSuccess"
             >
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
@@ -159,6 +166,8 @@ export default {
         goods_number: 0,
         // 商品所属的分类
         goods_cat: [],
+        // 图片上传临时路径,数组
+        pics: [],
       },
 
       // 表单的验证规则
@@ -322,6 +331,16 @@ export default {
 
     // 删除图片的操作
     handleRemove() {},
+
+    // 监听图片上传成功事件
+    handleSuccess(response) {
+      console.log(response)
+      // 拼接得到一个图片信息对象
+      const picInfo = { pic: response.data.tmp_path }
+      // 将图片信息对象push到pics中
+      this.addForm.pics.push(picInfo)
+      console.log(this.addForm);
+    },
   },
 
   computed: {
