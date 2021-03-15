@@ -50,7 +50,7 @@
       <el-form
         :model="addForm"
         :rules="addFormRules"
-        ref="ruleFormRef"
+        ref="addFormRef"
         label-width="100px"
         label-position="top"
       >
@@ -147,9 +147,11 @@
           </el-tab-pane>
           <el-tab-pane label="商品内容" name="4">
             <!-- 富文本编辑器 -->
-            <quill-editor v-model="goods_introduce" />
+            <quill-editor v-model="addForm.goods_introduce" />
             <!-- 添加商品按钮 -->
-            <el-button type="primary" class="addBnt"> 添加商品 </el-button>
+            <el-button type="primary" class="addBnt" @click="add">
+              添加商品
+            </el-button>
           </el-tab-pane>
         </el-tabs>
       </el-form>
@@ -224,6 +226,14 @@ export default {
           {
             required: true,
             message: '请选择三级分类',
+            trigger: 'blur',
+          },
+        ],
+
+        goods_introduce: [
+          {
+            required: true,
+            message: '请输入商品介绍',
             trigger: 'blur',
           },
         ],
@@ -380,6 +390,15 @@ export default {
       // 将图片信息对象push到pics中
       this.addForm.pics.push(picInfo)
       console.log(this.addForm)
+    },
+
+    // 添加商品
+    add() {
+      this.$refs.addFormRef.validate((val) => {
+        if (!val) {
+          return this.$message.error('请填写必要的表单项！')
+        }
+      })
     },
   },
 
