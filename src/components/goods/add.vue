@@ -188,6 +188,9 @@ export default {
         pics: [],
         // 商品详情描述
         goods_introduce: '',
+
+        //
+        attrs: [],
       },
 
       // 表单的验证规则
@@ -412,7 +415,33 @@ export default {
         const form = _.cloneDeep(this.addForm)
         form.goods_cat = form.goods_cat.join(',')
 
-        console.log(form);
+        // console.log(form)
+
+        /**
+         * 发送后台数据是，attrs只需要attr_id和attr_value就行
+         */
+        // 处理动态参数
+        this.manyTableData.forEach((item) => {
+          const newInfo = {
+            attr_id: item.attr_id,
+            attr_value: item.attr_vals.join(' '),
+          }
+          this.addForm.attrs.push(newInfo)
+        })
+        // 处理静态属性
+        this.onlyTableData.forEach((item) => {
+          const newInfo = {
+            attr_id: item.attr_id,
+            attr_value: item.attr_vals,
+          }
+          this.addForm.attrs.push(newInfo)
+        })
+        form.attrs = this.addForm.attrs
+
+        console.log(this.onlyTableData)
+        console.log(this.manyTableData)
+
+        console.log(form)
       })
     },
   },
