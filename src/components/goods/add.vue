@@ -399,7 +399,7 @@ export default {
 
     // 添加商品
     add() {
-      this.$refs.addFormRef.validate((val) => {
+      this.$refs.addFormRef.validate(async (val) => {
         if (!val) {
           return this.$message.error('请填写必要的表单项！')
         }
@@ -436,12 +436,24 @@ export default {
           }
           this.addForm.attrs.push(newInfo)
         })
+
         form.attrs = this.addForm.attrs
 
-        console.log(this.onlyTableData)
-        console.log(this.manyTableData)
+        // console.log(this.onlyTableData)
+        // console.log(this.manyTableData)
 
-        console.log(form)
+        // console.log(form)
+        // 发起请求添加商品
+        // 商品的名称，必须是唯一的
+        const { data: res } = await this.$http.post('goods', form)
+        console.log(res);
+
+        if (res.meta.status !== 201) {
+          return this.$message.error('添加商品失败！')
+        }
+
+        this.$message.success('添加商品成功！')
+        this.$router.push('/goods')
       })
     },
   },
