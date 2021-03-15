@@ -145,7 +145,12 @@
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-tab-pane>
-          <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
+          <el-tab-pane label="商品内容" name="4">
+            <!-- 富文本编辑器 -->
+            <quill-editor v-model="goods_introduce" />
+            <!-- 添加商品按钮 -->
+            <el-button type="primary" class="addBnt"> 添加商品 </el-button>
+          </el-tab-pane>
         </el-tabs>
       </el-form>
     </el-card>
@@ -156,7 +161,7 @@
       :visible.sync="previewDialogVisible"
       width="50%"
     >
-      <img :src="previewPath" alt="" class="previewImg"/>
+      <img :src="previewPath" alt="" class="previewImg" />
     </el-dialog>
   </div>
 </template>
@@ -177,6 +182,8 @@ export default {
         goods_cat: [],
         // 图片上传临时路径,数组
         pics: [],
+        // 商品详情描述
+        goods_introduce: '',
       },
 
       // 表单的验证规则
@@ -393,7 +400,11 @@ export default {
   margin: 5px 10px 0 0 !important;
 }
 
-.previewImg{
+.previewImg {
   width: 100%;
+}
+
+.addBnt {
+  margin-top: 20px;
 }
 </style>

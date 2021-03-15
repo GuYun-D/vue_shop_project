@@ -16,6 +16,15 @@ axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
 // 导入树形插件
 import TreeTable from 'vue-table-with-tree-grid'
 
+// 导入富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+// 导入富文本编辑器的样式
+import 'quill/dist/quill.core.css' 
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css' 
+// 全局注册
+Vue.use(VueQuillEditor)
+
 axios.interceptors.request.use(config => {
   console.log(config);
 
