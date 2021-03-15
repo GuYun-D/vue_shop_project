@@ -169,6 +169,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   data() {
     return {
@@ -394,17 +396,24 @@ export default {
 
     // 添加商品
     add() {
-      // this.$refs.addFormRef.validate((val) => {
-      //   if (!val) {
-      //     return this.$message.error('请填写必要的表单项！')
-      //   }
+      this.$refs.addFormRef.validate((val) => {
+        if (!val) {
+          return this.$message.error('请填写必要的表单项！')
+        }
 
-      //   // 向后端发送请求时，goods_cat必须是逗号分隔的字符串
-      //   this.addForm.goods_cat = this.addForm.goods_cat.join(',')
-      // })
-      this.addForm.goods_cat = this.addForm.goods_cat.join(',')
+        // 向后端发送请求时，goods_cat必须是逗号分隔的字符串
+        // this.addForm.goods_cat = this.addForm.goods_cat.join(',')
 
-      // console.log(this.addForm.goods_cat.join(','));
+        /**
+          对于级联选择器来说，他双向绑定的数据是数组，这里传给后端的数据需要是字符串，所以使用深拷贝，将addForm拷贝一份
+          使用lodash的深拷贝来完成
+         */
+
+        const form = _.cloneDeep(this.addForm)
+        form.goods_cat = form.goods_cat.join(',')
+
+        console.log(form);
+      })
     },
   },
 
