@@ -47,6 +47,7 @@
               type="primary"
               class="el-icon-edit"
               size="mini"
+              @click="showBox"
             ></el-button>
             <el-button
               type="success"
@@ -69,10 +70,46 @@
       >
       </el-pagination>
     </el-card>
+
+    <!-- 修改地址的对话框
+     -->
+    <el-dialog
+      title="提示"
+      :visible.sync="addRessVisible"
+      width="50%"
+      @close="addRessClosed"
+    >
+      <el-form
+        :model="addForm"
+        :rules="addFormRules"
+        ref="addFormRef"
+        label-width="100px"
+      >
+        <el-form-item
+          v-model="addForm.address1"
+          label="省市区县"
+          prop="address1"
+        >
+          <el-cascader :options="cityDate" clearable> </el-cascader>
+        </el-form-item>
+        <el-form-item label="详细地址" prop="address2">
+          <el-input v-model="addForm.address2"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addRessVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addRessVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+// 导入省市区数据
+import cityDate from './citydata'
+
 export default {
   data() {
     return {
@@ -88,6 +125,34 @@ export default {
 
       // 订单列表数据
       orderList: [],
+
+      //
+      addRessVisible: false,
+
+      addForm: {
+        address1: [],
+        address2: '',
+      },
+
+      addFormRules: {
+        address1: [
+          {
+            required: true,
+            message: '请选择省市区县',
+            trigger: 'blur',
+          },
+        ],
+
+        address2: [
+          {
+            required: true,
+            message: '请填写详细地址',
+            trigger: 'blur',
+          },
+        ],
+      },
+
+      cityDate: cityDate,
     }
   },
 
@@ -106,7 +171,7 @@ export default {
         return this.$message.error('获取订单列表失败')
       }
 
-    //   this.$message.success('获取订单列表成功')
+      //   this.$message.success('获取订单列表成功')
 
       console.log(res)
 
@@ -126,12 +191,26 @@ export default {
       this.queryInfo.pagenum = newPage
       this.getOrderList()
     },
+
+    // 展示修改地址的对话框
+    showBox() {
+      this.addRessVisible = true
+    },
+
+    // 关闭对话框清空表单
+    addRessClosed() {
+      this.$refs.addFormRef.resetFields()
+    },
   },
 }
 </script>
 
 <style scoped>
-.el-pagination{
-    margin-top: 40px;
+.el-pagination {
+  margin-top: 40px;
+}
+
+.el-cascader {
+  width: 100%;
 }
 </style>
