@@ -53,6 +53,7 @@
               type="success"
               class="el-icon-location"
               size="mini"
+              @click="showProgressBox"
             ></el-button>
           </template>
         </el-table-column>
@@ -102,6 +103,11 @@
           >确 定</el-button
         >
       </span>
+    </el-dialog>
+
+    <!-- 查询物流 -->
+    <el-dialog title="物理进度" :visible.sync="progressVisable" width="50%">
+      <span>这是一段信息</span>
     </el-dialog>
   </div>
 </template>
@@ -153,6 +159,9 @@ export default {
       },
 
       cityDate: cityDate,
+
+      // 物流查询对话框
+      progressVisable: false,
     }
   },
 
@@ -201,6 +210,21 @@ export default {
     addRessClosed() {
       this.$refs.addFormRef.resetFields()
     },
+
+    // 物流查询
+    // 后台接口报错，停止编写此功能
+    // async showProgressBox() {
+    //   const { data: res } = await this.$http.get('/kuaidi/804909574412544580')
+
+    //   if (res.meta.status !== 200) {
+    //     return this.$message.error('获取物流进度失败！')
+    //   }
+
+    //   this.progressInfo = res.data
+
+    //   this.progressVisible = true
+    //   console.log(this.progressInfo)
+    // },
   },
 }
 </script>
