@@ -11,10 +11,7 @@
     <el-card>
       <el-row>
         <el-col :span="8">
-          <el-input
-            placeholder="请输入内容"
-            class="input-with-select"
-          >
+          <el-input placeholder="请输入内容" class="input-with-select">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
@@ -24,7 +21,49 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      // 查询对象
+      queryInfo: {
+        query: '',
+        pagenum: 1,
+        pagesize: 10,
+      },
+
+      // 总数
+      total: 0,
+
+      // 订单列表数据
+      orderList: [],
+    }
+  },
+
+  created() {
+    this.getOrderList()
+  },
+
+  methods: {
+    //  获取订单列表
+    async getOrderList() {
+      const { data: res } = await this.$http.get('orders', {
+        params: this.queryInfo,
+      })
+
+      if (res.meta.status !== 200) {
+        return this.$message.error('获取订单列表失败')
+      }
+
+      this.$message.success('获取订单列表成功')
+
+      console.log(res)
+
+      this.total = res.data.total
+
+      this.orderList = res.data.goods
+    },
+  },
+}
 </script>
 
 <style scoped>
