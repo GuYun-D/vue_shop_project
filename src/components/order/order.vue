@@ -49,12 +49,10 @@
               size="mini"
               @click="showBox"
             ></el-button>
-            <el-button
-              type="success"
-              class="el-icon-location"
-              size="mini"
-              @click="showProgressBox"
-            ></el-button>
+
+            <el-button type="success" class="el-icon-location" size="mini"
+              ><!-- @click="showProgressBox" -->
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
