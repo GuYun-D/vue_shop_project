@@ -7,13 +7,13 @@
       <el-breadcrumb-item>数据报表</el-breadcrumb-item>
     </el-breadcrumb>
 
-    <el-card>
-        123
-    </el-card>
+    <h1>数据报表</h1>
+    <h5>未开始学习echarts，此功能略过</h5>
   </div>
 </template>
 
 <script>
+
 export default {
   data() {
     return {}
@@ -21,7 +21,6 @@ export default {
 
   created() {},
 
-  methods: {},
 }
 </script>
 
