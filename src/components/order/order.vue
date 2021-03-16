@@ -24,15 +24,17 @@
         <el-table-column label="订单编号" prop="order_number"></el-table-column>
         <el-table-column label="订单价格" prop="order_price"></el-table-column>
         <el-table-column label="是否付款" prop="pay_status">
-            <template slot-scope="scope">
-                <el-tag type="success" v-if="scope.row.pay_status === '1'">已付款</el-tag>
-                <el-tag type="danger" v-else>未付款</el-tag>
-            </template>
+          <template slot-scope="scope">
+            <el-tag type="success" v-if="scope.row.pay_status === '1'"
+              >已付款</el-tag
+            >
+            <el-tag type="danger" v-else>未付款</el-tag>
+          </template>
         </el-table-column>
         <el-table-column label="是否发货" prop="is_send">
-            <template slot-scope="scope">
-                {{scope.row.is_send}}
-            </template>
+          <template slot-scope="scope">
+            {{ scope.row.is_send }}
+          </template>
         </el-table-column>
         <el-table-column label="下单时间" prop="create_time">
           <template slot-scope="scope">
@@ -54,6 +56,18 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!-- 分页区域 -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[5, 10, 15]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -92,7 +106,7 @@ export default {
         return this.$message.error('获取订单列表失败')
       }
 
-      this.$message.success('获取订单列表成功')
+    //   this.$message.success('获取订单列表成功')
 
       console.log(res)
 
@@ -100,9 +114,24 @@ export default {
 
       this.orderList = res.data.goods
     },
+
+    //
+    handleSizeChange(newSize) {
+      this.queryInfo.pagesize = newSize
+      this.getOrderList()
+    },
+
+    //
+    handleCurrentChange(newPage) {
+      this.queryInfo.pagenum = newPage
+      this.getOrderList()
+    },
   },
 }
 </script>
 
 <style scoped>
+.el-pagination{
+    margin-top: 40px;
+}
 </style>
