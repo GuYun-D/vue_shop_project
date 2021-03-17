@@ -10,9 +10,10 @@ module.exports = {
   ],
 
   plugins: [
-    "transform-remove-console"
+    "transform-remove-console",
     // 发布产品时候的插件数组
     // ...prodPlugins,
     // '@babel/plugin-syntax-dynamic-import'
+    '@babel/plugin-syntax-dynamic-import'
   ]
 }
