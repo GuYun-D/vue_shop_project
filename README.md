@@ -1,21 +1,3 @@
-# vue_shop_project
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
 ##### 项目后台api接口未上传
+
+**本项目只是为了练习vue与element Ui**
